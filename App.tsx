@@ -5,55 +5,21 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, {useEffect} from 'react';
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  TextInput,
   View,
+  useColorScheme,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {addTodoItem, getTodoItems} from './helper';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -61,6 +27,11 @@ function App(): JSX.Element {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+  const [todoItems, setTodoItems] = React.useState([]);
+  const [newTodoItem, setNewTodoItem] = React.useState('');
+  useEffect(() => {
+    getTodoItems(0, 10).then(items => setTodoItems(items));
+  }, []);
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -71,25 +42,32 @@ function App(): JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>TODO</Text>
+        </View>
+        <View style={styles.sectionContainer}>
+          {todoItems.map((item: any) => (
+            <View key={item.id} style={styles.todoItem}>
+              <Text style={styles.sectionDescription}>{item.title}</Text>
+            </View>
+          ))}
+        </View>
+        <View style={styles.sectionContainer}>
+          <TextInput
+            style={styles.sectionDescription}
+            placeholder="Add your todo item"
+            onChange={e => setNewTodoItem(e.nativeEvent.text)}
+          />
+          <Button
+            title="Add"
+            onPress={() => {
+              addTodoItem(newTodoItem).then(() => {
+                getTodoItems(0, 10).then(items => {
+                  setTodoItems(items);
+                });
+              });
+            }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -112,6 +90,13 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  todoItem: {
+    fontSize: 18,
+    fontWeight: '400',
+    borderBottomWidth: 1,
+    padding: 8,
+    borderBottomColor: 'gray',
   },
 });
 
