@@ -48,36 +48,37 @@ This is one way to run your app — you can also run it directly from within And
 
 ## Task
 
-Below are the tasks you need to complete the assignment, The current codebase consists of bugs and lacks performance. You need to identify the bugs and fix them
+The current codebase has performance issues and bugs that need to be identified and fixed. Below are the specific tasks to complete the assignment:
 
-1. Add a login screen and implement Google sign-in, add 2FA for mobile OTP using Firebase
-2. Add a splash screen
-3. Make the todo screen accessible only to authenticated users (Tab nav)
-4. Add Infinite scrolling for todo page
-5. Add a profile screen and show profile info(Tab nav)
-6. Add a Dark mode toggle
-7. Add update Todo functionality using a Modal/Dialog
-8. Add a toast or appropriate feedback while adding todo
-9. Handle error, loading states for each action.
-10. Add error helper text for validation.
-11. Write unit tests for each component
-12. change package name, bundle id to dev.scopex.[your_github]
-13. upgrade the react native version to 0.74.1
-14. Update the icon to any other icon of your choice
-15. Change the font to Fira code[https://fonts.google.com/specimen/Fira+Code]
+1. Add Login Screen: Implement a login screen with Google sign-in and two-factor authentication (2FA) using Firebase for mobile OTP.
+2. Add Splash Screen: Introduce a splash screen for the application.
+3. Secure Todo Screen: Ensure the todo screen is accessible only to authenticated users using Tab navigation.
+4. Infinite Scrolling for Todo Page: Implement infinite scrolling on the todo page.
+5. Add Profile Screen: Create a profile screen to display user profile information using Tab navigation.
+6. Dark Mode Toggle: Add a toggle option for dark mode.
+7. Update Todo Functionality: Implement update functionality for todos using a Modal/Dialog.
+8. Feedback for Adding Todo: Provide toast notifications or appropriate feedback when adding a todo.
+9. Handle States: Manage error and loading states for each action.
+10. Validation Helper Text: Add helper text for error validation.
+11. Unit Tests: Write unit tests for each component.
+12. Change Package Name and Bundle ID: Update the package name and bundle ID to dev.scopex.[your_github].
+13. Upgrade React Native Version: Upgrade the React Native version to 0.74.1.
+14. Update App Icon: Change the app icon to one of your choice.
+15. Change Font: Change the app's font to Fira Code from https://fonts.google.com/specimen/Fira+Code
 
 PS: You are allowed to use external packages for toasts, dialogs, etc
 
 ### Judging criteria
 
-- Clean, maintainable and reusable code [Most Important]
-- Optimization of code
-- Type safety
-- Be creative
+- Code Quality: Ensure the code is clean, maintainable, and reusable.
+- Optimization: Optimize the code for better performance.
+- Type Safety: Implement type safety.
+- Creativity: Be creative in the implementation.
 
 ### Deliverables
 
-- 1 repo with 2 folders
-  - 1st with the completed tasks ticked in readme with current react native version
-  - 2nd with the completed tasks ticked in readme with upgraded react native version
-- Documentation in readme and comments
+- A single repository containing two folders:
+  - First Folder: Contains the completed tasks, with a README indicating the current React Native version and the tasks completed.
+  - Second Folder: Contains the upgraded React Native version (0.74.1), with a README indicating the completed tasks.
+- Documentation: Provide documentation in the README and appropriate comments within the code.
+- Make sure it's not a single commit, add commits as you progress
