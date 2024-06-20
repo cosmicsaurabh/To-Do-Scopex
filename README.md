@@ -77,7 +77,7 @@ PS: You are allowed to use external packages for toasts, dialogs, etc
 
 ### Deliverables
 
-- A single repository containing two folders:
+- A single new repository created by you, containing two folders:
   - First Folder: Contains the completed tasks, with a README indicating the current React Native version and the tasks completed.
   - Second Folder: Contains the upgraded React Native version (0.74.1), with a README indicating the completed tasks.
 - Documentation: Provide documentation in the README and appropriate comments within the code.
