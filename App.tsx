@@ -21,13 +21,19 @@ import {
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {addTodoItem, getTodoItems} from './helper';
 
+type TodoItem = {
+  id: string;
+  title: string;
+  done: boolean;
+};
+
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-  const [todoItems, setTodoItems] = React.useState([]);
+  const [todoItems, setTodoItems] = React.useState<TodoItem[]>([]);
   const [newTodoItem, setNewTodoItem] = React.useState('');
   useEffect(() => {
     getTodoItems(0, 10).then(items => setTodoItems(items));
