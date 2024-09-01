@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     margin: 20,
   },
+  
   confirmationText: {
     fontSize: 16,
     color: '#666666',

@@ -141,13 +141,20 @@ function HomePage({ navigation }: any): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
+        <View style={styles.header}>
+        <Text style={styles.tabTitle}>Home</Text>
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={handleAddToDo}
+        >
+        <Icon name="add-outline" size={35} color="white" />
+      </TouchableOpacity>
+        </View>
+        
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}
       >
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>TODO</Text>
-        </View>
         <View style={styles.sectionContainer}>
           {todoItems.map((item: TodoItem) => (
             <View key={item.id} style={styles.todoItem}>
@@ -173,28 +180,43 @@ function HomePage({ navigation }: any): JSX.Element {
           ))}
         </View>
       </ScrollView>
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={handleAddToDo}
-      >
-        <Icon name="add-outline" size={35} color="white" />
-      </TouchableOpacity>
+      
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    marginTop: 32,
+    marginTop: 70,
     paddingHorizontal: 24,
   },
   safearea:{
 flexGrow:1,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 60,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+    elevation: 4, // Adds shadow for Android
+    shadowColor: '#000', // Adds shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    zIndex: 1,
   },
+  tabTitle: {
+    fontSize: 18, // Adjusted font size
+    fontWeight: '600',
+    color: '#333',
+  },
+ 
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
@@ -241,12 +263,12 @@ flexGrow:1,
   },
   fab: {
     position: 'absolute',
-    right: 10,
-    top: 20,
+    right: 25,
+    // top: 10,
     backgroundColor: '#fbc02e',
     borderRadius: 28,
-    width: 56,
-    height: 56,
+    width: 50,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     elevation:8,

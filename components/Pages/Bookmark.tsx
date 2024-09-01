@@ -126,9 +126,9 @@ function Bookmark({ navigation }: any): JSX.Element {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}
       >
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Bookmarks</Text>
-        </View>
+        <View style={styles.header}>
+        <Text style={styles.tabTitle}>Bookmarks</Text>
+      </View>
         <View style={styles.sectionContainer}>
           {todoItems.map((item: TodoItem) => (
             <View key={item.id} style={styles.todoItem}>
@@ -161,13 +161,33 @@ function Bookmark({ navigation }: any): JSX.Element {
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    marginTop: 32,
+    marginTop: 70,
     paddingHorizontal: 24,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 60,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+    elevation: 4, // Adds shadow for Android
+    shadowColor: '#000', // Adds shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    zIndex: 1,
   },
+  tabTitle: {
+    fontSize: 18, // Adjusted font size
+    fontWeight: '600',
+    color: '#333',
+  },
+
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
