@@ -11,7 +11,8 @@ import {
   Alert,
 } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { getTodoItems } from '../../helper';
+// import { getTodoItems } from '../../helper';
+import { useTodo } from '../../context/TodoProvider';
 import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -19,21 +20,22 @@ type TodoItem = {
   id: string;
   title: string;
   done: boolean;
+  bookmarked:boolean;
 };
 
 function Bookmark({ navigation }: any): JSX.Element {
+  const {  todos,bookmarkTodoItem,isChangedSomething } = useTodo();
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter };
 
   const [todoItems, setTodoItems] = useState<TodoItem[]>([]);
-  const [somethingUpdated, setSomethingUpdated] = useState(true);
 
   useEffect(() => {
     fetchTodoItems();
-  }, [somethingUpdated]);
+  }, [isChangedSomething]);
 
   const fetchTodoItems = async () => {
-    const items = await getTodoItems(0, 100);
+    const items =  todos.filter(that => that.bookmarked);
     setTodoItems(items);
   };
 
@@ -46,7 +48,6 @@ function Bookmark({ navigation }: any): JSX.Element {
       navigation.navigate('DeleteToDo', { 
         item, 
         onUpdate: () => {
-          setSomethingUpdated(prev => !prev);
           Toast.show({
             type: 'success',
             text1: 'Todo Deleted',
@@ -64,27 +65,7 @@ function Bookmark({ navigation }: any): JSX.Element {
     }
   };
   
-  const handleAddToDo = async () => {
-    try {
-      navigation.navigate('AddToDo', { 
-        onUpdate: (newlyaddedtitle:newtitle) => {
-          setSomethingUpdated(prev => !prev);
-          Toast.show({
-            type: 'success',
-            text1: 'Todo Added',
-            text2: `${truncateText(newlyaddedtitle, 20)} has been added.`, 
-          });
-        }
-      });
-    } catch (error) {
-      console.error('Error add todo item', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'There was an error adding the todo item.',
-      });
-    }
-  };
+  
 
   const handleEditToDo = async (item: TodoItem) => {
     try {
@@ -92,7 +73,6 @@ function Bookmark({ navigation }: any): JSX.Element {
       navigation.navigate('EditToDo', { 
         item, 
         onUpdate: (updatedTitle: Todoitem) => {
-          setSomethingUpdated(prev => !prev);
           Toast.show({
             type: 'success',
             text1: 'Todo Updated',
@@ -109,6 +89,32 @@ function Bookmark({ navigation }: any): JSX.Element {
       });
     }
   };
+  const handleBookmarkToDo = async(item) =>{
+    try{
+      let updatedbookmarkstatus = item.bookmarked;
+      {item.bookmarked?
+      updatedbookmarkstatus = "removed from bookmark"
+      :
+      updatedbookmarkstatus = "added to bookmark"
+      }
+      item.bookmarked =! item.bookmarked;
+      const newstate = item.bookmarked;
+      await bookmarkTodoItem({...item,bookmarked:newstate})
+      Toast.show({
+        type: 'success',
+        text1: 'Todo Bookmarked',
+        text2: `${truncateText(item.title, 20)} has been ${updatedbookmarkstatus}`, 
+      });
+    }catch (error) {
+      console.error('Error bookmarking todo item', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'There was an error bookmakring the todo item.',
+      });
+    }
+  }
+
 
   return (
     <SafeAreaView>
@@ -134,6 +140,9 @@ function Bookmark({ navigation }: any): JSX.Element {
                 {/* <Text style={styles.sectionDescription}>{item.id}</Text> */}
               </View>
               <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={() => handleBookmarkToDo(item)} style={styles.bookmarkButton}>
+                  <Icon name={item.bookmarked?"heart-dislike-circle-outline": "heart-circle-outline"} size={24} color="white" />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleDeleteToDo(item)} style={styles.deleteButton}>
                   <Icon name="trash-outline" size={24} color="white" />
                 </TouchableOpacity>
@@ -145,12 +154,7 @@ function Bookmark({ navigation }: any): JSX.Element {
           ))}
         </View>
       </ScrollView>
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={handleAddToDo}
-      >
-        <Icon name="add-circle-outline" size={24} color="white" />
-      </TouchableOpacity>
+      
     </SafeAreaView>
   );
 }
@@ -185,6 +189,14 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
   },
+  bookmarkButton: {
+    backgroundColor: '#f774d7',
+    borderRadius: 4,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    marginRight: 8,
+    elevation: 2,
+  },
   deleteButton: {
     backgroundColor: 'red',
     borderRadius: 4,
@@ -200,19 +212,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     elevation: 2,
   },
-  fab: {
-    position: 'absolute',
-    right: 16,
-    bottom: 16,
-    backgroundColor: '#fbc02e',
-    borderRadius: 28,
-    width: 56,
-    height: 56,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation:8,
-    
-  },
+  
 });
 
 export default Bookmark;

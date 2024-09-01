@@ -11,29 +11,32 @@ import {
   Alert,
 } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { getTodoItems } from '../../helper';
+// import { getTodoItems } from '../../helper';
 import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTodo } from '../../context/TodoProvider';
 
 type TodoItem = {
   id: string;
   title: string;
   done: boolean;
+  bookmarked:boolean;
 };
 
 function HomePage({ navigation }: any): JSX.Element {
+  const {  todos,bookmarkTodoItem ,isChangedSomething} = useTodo();
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter };
 
   const [todoItems, setTodoItems] = useState<TodoItem[]>([]);
-  const [somethingUpdated, setSomethingUpdated] = useState(true);
 
   useEffect(() => {
     fetchTodoItems();
-  }, [somethingUpdated]);
+  }, [isChangedSomething]);
 
   const fetchTodoItems = async () => {
-    const items = await getTodoItems(0, 100);
+    // const items = await getTodoItems(0, 100);
+    const items = await todos;
     setTodoItems(items);
   };
 
@@ -46,7 +49,6 @@ function HomePage({ navigation }: any): JSX.Element {
       navigation.navigate('DeleteToDo', { 
         item, 
         onUpdate: () => {
-          setSomethingUpdated(prev => !prev);
           Toast.show({
             type: 'success',
             text1: 'Todo Deleted',
@@ -68,7 +70,6 @@ function HomePage({ navigation }: any): JSX.Element {
     try {
       navigation.navigate('AddToDo', { 
         onUpdate: (newlyaddedtitle:newtitle) => {
-          setSomethingUpdated(prev => !prev);
           Toast.show({
             type: 'success',
             text1: 'Todo Added',
@@ -92,7 +93,6 @@ function HomePage({ navigation }: any): JSX.Element {
       navigation.navigate('EditToDo', { 
         item, 
         onUpdate: (updatedTitle: Todoitem) => {
-          setSomethingUpdated(prev => !prev);
           Toast.show({
             type: 'success',
             text1: 'Todo Updated',
@@ -109,9 +109,34 @@ function HomePage({ navigation }: any): JSX.Element {
       });
     }
   };
+  const handleBookmarkToDo = async(item) =>{
+    try{
+      let updatedbookmarkstatus = item.bookmarked;
+      {item.bookmarked?
+      updatedbookmarkstatus = "removed from bookmark"
+      :
+      updatedbookmarkstatus = "added to bookmark"
+      }
+      item.bookmarked =! item.bookmarked;
+      const newstate = item.bookmarked;
+      await bookmarkTodoItem({...item,bookmarked:newstate})
+      Toast.show({
+        type: 'success',
+        text1: 'Todo Bookmarked',
+        text2: `${truncateText(item.title, 20)} has been ${updatedbookmarkstatus}`, 
+      });
+    }catch (error) {
+      console.error('Error bookmarking todo item', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'There was an error bookmakring the todo item.',
+      });
+    }
+  }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safearea}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
@@ -131,9 +156,12 @@ function HomePage({ navigation }: any): JSX.Element {
                   {truncateText(item.title, 40)}
                   
                 </Text>
-                {/* <Text style={styles.sectionDescription}>{item.id}</Text> */}
+                <Text style={styles.sectionDescription}>{item.bookmarked?"true":"false"}</Text>
               </View>
               <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={() => handleBookmarkToDo(item)} style={styles.bookmarkButton}>
+                  <Icon name={item.bookmarked?"heart-dislike-circle-outline": "heart-circle-outline"} size={24} color="white" />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleDeleteToDo(item)} style={styles.deleteButton}>
                   <Icon name="trash-outline" size={24} color="white" />
                 </TouchableOpacity>
@@ -149,7 +177,7 @@ function HomePage({ navigation }: any): JSX.Element {
         style={styles.fab}
         onPress={handleAddToDo}
       >
-        <Icon name="add-circle-outline" size={24} color="white" />
+        <Icon name="add-outline" size={35} color="white" />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -159,6 +187,9 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
+  },
+  safearea:{
+flexGrow:1,
   },
   sectionTitle: {
     fontSize: 24,
@@ -185,6 +216,14 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
   },
+  bookmarkButton: {
+    backgroundColor: '#f774d7',
+    borderRadius: 4,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    marginRight: 8,
+    elevation: 2,
+  },
   deleteButton: {
     backgroundColor: 'red',
     borderRadius: 4,
@@ -202,8 +241,8 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    right: 16,
-    bottom: 16,
+    right: 10,
+    top: 20,
     backgroundColor: '#fbc02e',
     borderRadius: 28,
     width: 56,

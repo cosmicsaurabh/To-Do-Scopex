@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Button, SafeAreaView, TextInput, StyleSheet, View, Alert, TouchableOpacity, Text } from 'react-native';
 import { useRoute,useNavigation } from '@react-navigation/native';
-import { addTodoItem } from '../../helper';
-
+// import { addTodoItem } from '../../helper';
+import { useTodo } from '../../context/TodoProvider';
 function AddToDo() {
+  const {   addTodoItem } = useTodo();
+
   const navigation = useNavigation();
   const route = useRoute();
   const [title, setTitle] = useState('');

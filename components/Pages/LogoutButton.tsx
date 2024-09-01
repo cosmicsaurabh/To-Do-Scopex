@@ -1,39 +1,43 @@
 import React from 'react';
-import { Text, StyleSheet, View,TouchableOpacity } from 'react-native';
-import { useAuth } from "../../context/AuthProvider"
-const LogoutButton = () =>{
-    const {logout} = useAuth();
-    const handleLogout = () => {
-      // console.log("click logout");
-      logout(); 
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { useAuth } from '../../context/AuthProvider';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-    };
-    return (
+const LogoutButton = () => {
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  return (
     <View style={styles.container}>
-        <TouchableOpacity  title = "dg" onPress={handleLogout} style={styles.logoutbutton}>
-          <Text style={styles.buttontext}>Log out</Text>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Icon name="log-out-outline" size={24} color="white" />
+        {/* <Text style={styles.logoutText}>Logout</Text> */}
+      </TouchableOpacity>
     </View>
-    );
+  );
 };
+
 export default LogoutButton;
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FF5733',
+    borderRadius: 10,
+    padding: 10,
     margin: 10,
   },
-  logoutbutton:{
-    // elevation: 8,
-    backgroundColor: "#FF5733",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+  logoutText: {
+    color: 'white',
+    fontSize: 16,
+    marginLeft: 10,
   },
-  buttontext:{
-    fontSize: 18,
-    color: "#fff",
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase"
-  }
 });

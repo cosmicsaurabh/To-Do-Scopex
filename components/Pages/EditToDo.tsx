@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { SafeAreaView, TextInput, StyleSheet, View, Alert, TouchableOpacity, Text,ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { updateTodoItem } from '../../helper';
-
+// import { updateTodoItem } from '../../helper';
+import { useTodo } from '../../context/TodoProvider';
 type TodoItem = {
   id: string;
   title: string;
@@ -12,6 +12,8 @@ type TodoItem = {
 function EditToDo() {
   const navigation = useNavigation();
   const route = useRoute();
+  const {   updateTodoItem } = useTodo();
+
   const { item, onUpdate } = route.params as { item: TodoItem, onUpdate: () => void };
 
   const [title, setTitle] = useState(item.title);
