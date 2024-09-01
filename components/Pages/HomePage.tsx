@@ -130,7 +130,8 @@ function HomePage({ navigation }: any): JSX.Element {
             <View key={item.id} style={styles.todoItem}>
               <View style={styles.todoContent}>
                 <Text style={styles.sectionDescription}>
-                  {item.title.length > 50 ? `${item.title.substring(0, 50)}...` : item.title}
+                  {truncateText(item.title, 40)}
+                  
                 </Text>
                 {/* <Text style={styles.sectionDescription}>{item.id}</Text> */}
               </View>
@@ -192,12 +193,14 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 8,
     marginRight: 8,
+    elevation: 2,
   },
   editButton: {
     backgroundColor: 'green',
     borderRadius: 4,
     paddingVertical: 4,
     paddingHorizontal: 8,
+    elevation: 2,
   },
   fab: {
     position: 'absolute',
@@ -209,6 +212,7 @@ const styles = StyleSheet.create({
     height: 56,
     justifyContent: 'center',
     alignItems: 'center',
+    elevation:20,
   },
 });
 

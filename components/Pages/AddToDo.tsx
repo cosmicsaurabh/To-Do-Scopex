@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 15,
     elevation: 8,
+    
   },
   buttonText: {
     fontSize: 18,
