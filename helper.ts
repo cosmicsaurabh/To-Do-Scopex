@@ -33,6 +33,7 @@ export async function addTodoItem(title: string) {
   // if (Math.random() < 0.2) {
   //   throw new Error('Random error');
   // }
+  console.log("added")
   const todoItems = JSON.parse(
     (await AsyncStorage.getItem('todoItems')) || '[]',
   );

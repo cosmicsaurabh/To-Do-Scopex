@@ -1,80 +1,30 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React, {useEffect,useState} from 'react';
-import {
-  Button,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  useColorScheme,
-} from 'react-native';
-
-import SplashScreen from './components/SplashScreen/SplashScreen';
+import React, {useEffect, useState} from 'react';
+import {AuthProvider} from './context/AuthProvider';
+import RootNavigator from './components/Navigation/RootNavigator';
+import {NavigationContainer} from '@react-navigation/native';
+import {useAuth} from './context/AuthProvider';
+import SignIn from './components/Pages/SignIn';
 import StartPage from './components/Pages/StartPage';
-import { NavigationContainer } from "@react-navigation/native";
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
-
-
+import SplashScreen from './components/SplashScreen/SplashScreen';
 function App(): JSX.Element {
-  
-
-  const [isNavigationIsReady, setNavigationIsReady] = useState(true);
-  const [showSplash,setShowSplash] = useState(true);
-  
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    const timer = 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setShowSplash(false);
-    }, );
+    },500);
 
     return () => clearTimeout(timer);
   }, []);
-  
+  if (showSplash) {
+    return <SplashScreen />; 
+  }
 
   return (
-
-      <NavigationContainer >
-      {showSplash ? <SplashScreen /> : <StartPage/> }
-      </NavigationContainer>
-      
+    <AuthProvider>
+      <RootNavigator />
+    </AuthProvider>
   );
 }
-
-// const styles = StyleSheet.create({
-//   sectionContainer: {
-//     marginTop: 32,
-//     paddingHorizontal: 24,
-//   },
-//   sectionTitle: {
-//     fontSize: 24,
-//     fontWeight: '600',
-//   },
-//   sectionDescription: {
-//     marginTop: 8,
-//     fontSize: 18,
-//     fontWeight: '400',
-//   },
-//   highlight: {
-//     fontWeight: '700',
-//   },
-//   todoItem: {
-//     fontSize: 18,
-//     fontWeight: '400',
-//     borderBottomWidth: 1,
-//     padding: 8,
-//     borderBottomColor: 'gray',
-//   },
-// });
 
 export default App;

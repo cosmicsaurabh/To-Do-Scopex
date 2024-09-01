@@ -12,6 +12,7 @@ import {
   } from 'react-native';
   import {Colors} from 'react-native/Libraries/NewAppScreen';
   import {addTodoItem, getTodoItems} from '../../helper';
+  import LogoutButton from "./LogoutButton";
 
   type TodoItem = {
     id: string;
@@ -30,7 +31,7 @@ function StartPage(): JSX.Element {
   const [newTodoItem, setNewTodoItem] = useState('');
 
   useEffect(() => {
-    getTodoItems(0, 10).then(items => setTodoItems(items));
+    getTodoItems(0, 100).then(items => setTodoItems(items));
   }, []);
     return(
         <SafeAreaView>
@@ -41,6 +42,7 @@ function StartPage(): JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
+          <LogoutButton/>
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>TODO</Text>
         </View>
@@ -61,7 +63,7 @@ function StartPage(): JSX.Element {
             title="Add"
             onPress={() => {
               addTodoItem(newTodoItem).then(() => {
-                getTodoItems(0, 10).then(items => {
+                getTodoItems(0, 100).then(items => {
                   setTodoItems(items);
                 });
               });
