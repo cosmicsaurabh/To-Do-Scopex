@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthProvider"
 const LogoutButton = () =>{
     const {logout} = useAuth();
     const handleLogout = () => {
-      console.log("click logout");
+      // console.log("click logout");
       logout(); 
 
     };
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   logoutbutton:{
-    elevation: 8,
+    // elevation: 8,
     backgroundColor: "#FF5733",
     borderRadius: 10,
     paddingVertical: 10,

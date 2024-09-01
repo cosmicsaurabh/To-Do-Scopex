@@ -2,6 +2,7 @@
 // DO Not modify this file.
 //
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import UUID from 'react-native-uuid';
 
 type TodoItem = {
   id: string;
@@ -33,12 +34,13 @@ export async function addTodoItem(title: string) {
   // if (Math.random() < 0.2) {
   //   throw new Error('Random error');
   // }
-  console.log("added")
+  // console.log("added")
   const todoItems = JSON.parse(
     (await AsyncStorage.getItem('todoItems')) || '[]',
   );
   todoItems.push({
-    id: Math.random().toString(36).substr(2, 9),
+    // id: Math.random().toString(36).substr(2, 9),
+    id: UUID.v4(),
     title,
     done: false,
   });
@@ -46,11 +48,11 @@ export async function addTodoItem(title: string) {
 }
 
 export async function updateTodoItem(todoItem: TodoItem) {
-  await wait(500);
-  //   Throw random error to simulate network error or server error
-  if (Math.random() < 0.2) {
-    throw new Error('Random error');
-  }
+  // await wait(500);
+  // //   Throw random error to simulate network error or server error
+  // if (Math.random() < 0.2) {
+  //   throw new Error('Random error');
+  // }
   const todoItems = JSON.parse(
     (await AsyncStorage.getItem('todoItems')) || '[]',
   );
@@ -62,11 +64,11 @@ export async function updateTodoItem(todoItem: TodoItem) {
 }
 
 export async function deleteTodoItem(id: string) {
-  await wait(500);
+  // await wait(500);
   //   Throw random error to simulate network error or server error
-  if (Math.random() < 0.2) {
-    throw new Error('Random error');
-  }
+  // if (Math.random() < 0.2) {
+  //   throw new Error('Random error');
+  // }
   const todoItems = JSON.parse(
     (await AsyncStorage.getItem('todoItems')) || '[]',
   );

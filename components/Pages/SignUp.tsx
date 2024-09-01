@@ -22,7 +22,7 @@ const SignUp = () => {
     } else {
       alert('Please fill in all fields');
     }
-    console.log(form);
+    // console.log(form);
   };
 
   return (

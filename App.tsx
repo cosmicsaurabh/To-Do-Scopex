@@ -4,8 +4,9 @@ import RootNavigator from './components/Navigation/RootNavigator';
 import {NavigationContainer} from '@react-navigation/native';
 import {useAuth} from './context/AuthProvider';
 import SignIn from './components/Pages/SignIn';
-import StartPage from './components/Pages/StartPage';
+import HomePage from './components/Pages/HomePage';
 import SplashScreen from './components/SplashScreen/SplashScreen';
+import Toast from 'react-native-toast-message';
 function App(): JSX.Element {
   const [showSplash, setShowSplash] = useState(true);
 
@@ -23,6 +24,7 @@ function App(): JSX.Element {
   return (
     <AuthProvider>
       <RootNavigator />
+      <Toast />
     </AuthProvider>
   );
 }
