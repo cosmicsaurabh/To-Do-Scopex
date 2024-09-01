@@ -28,13 +28,14 @@ function AddToDo() {
       <View style={styles.container}>
         <TextInput
           style={styles.input}
+          multiline
           value={title}
           onChangeText={setTitle}
           placeholder="Enter Todo Title"
           placeholderTextColor="#999999"
         />
         <TouchableOpacity onPress={handleAdd} style={styles.addButton}>
-          <Text style={styles.buttonText}>Add</Text>
+          <Text style={styles.buttonText}>Add new to-do</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   input: {
-    height: 48,
+    height: 200,
     borderColor: '#cccccc',
     borderWidth: 1,
     borderRadius: 8,

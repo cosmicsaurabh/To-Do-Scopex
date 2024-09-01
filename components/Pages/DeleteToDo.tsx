@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity,ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { deleteTodoItem } from '../../helper';
 

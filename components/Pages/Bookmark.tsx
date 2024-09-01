@@ -21,7 +21,7 @@ type TodoItem = {
   done: boolean;
 };
 
-function HomePage({ navigation }: any): JSX.Element {
+function Bookmark({ navigation }: any): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter };
 
@@ -121,7 +121,7 @@ function HomePage({ navigation }: any): JSX.Element {
         style={backgroundStyle}
       >
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>TODO</Text>
+          <Text style={styles.sectionTitle}>Bookmarks</Text>
         </View>
         <View style={styles.sectionContainer}>
           {todoItems.map((item: TodoItem) => (
@@ -215,4 +215,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomePage;
+export default Bookmark;
