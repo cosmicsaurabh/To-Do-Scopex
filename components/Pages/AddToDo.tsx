@@ -43,7 +43,7 @@ function AddToDo() {
           placeholderTextColor="#999999"
         />
         <TouchableOpacity onPress={handleAdd} style={styles.addButton}>
-          <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Add new to-do</Text>
+          <Text style={styles.buttonText}>Add new to-do</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 18,
     color: '#fff',
+    fontFamily: 'FiraCode-Bold',
   },
 });
 

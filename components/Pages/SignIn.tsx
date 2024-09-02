@@ -56,7 +56,8 @@ const SignIn = () => {
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>Don't have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <Text style={styles.signupButton}>Sign up</Text>
+            {/* <Text style={[styles.signupButton,{fontFamily:"FiraCode-VariableFont_wght"}]} >Sign up</Text> */}
+            <Text style={styles.signupButton} >Sign up</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
+    
   },
   signupContainer: {
     flexDirection: 'row',

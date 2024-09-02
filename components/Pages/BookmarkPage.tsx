@@ -14,7 +14,7 @@ import { useTodo } from '../../context/TodoProvider';
 import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../context/ThemeProvider';
-
+import GlobalStyle from '../others/GlobalStyle';
 
 type TodoItem = {
   id: string;
@@ -209,7 +209,7 @@ return (
   <SafeAreaView style={[styles.safearea, backgroundStyle]}>
 
     <View style={styles.header}>
-      <Text style={[styles.tabTitle, { color: theme.colors.text }]}>Bookmarks</Text>
+      <Text style={[styles.tabTitle,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Bookmarks</Text>
     </View>
     <View style={styles.sectionContainer}>
       <FlatList

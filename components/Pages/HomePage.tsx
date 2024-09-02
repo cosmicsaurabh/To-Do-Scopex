@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useTodo} from '../../context/TodoProvider';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { useTheme } from '../../context/ThemeProvider';
+import GlobalStyle from '../others/GlobalStyle';
 type TodoItem = {
   id: string;
   title: string;
@@ -202,7 +203,7 @@ function HomePage({navigation}: any): JSX.Element {
   return (
     <SafeAreaView style={styles.safearea}>
       <View style={styles.header}>
-      <Text style={[styles.tabTitle, { color: theme.colors.text }]}>Home</Text>
+      <Text style={[styles.tabTitle,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Home</Text>
         <ToggleSwitch
           isOn={isBookmarkedToggled}
           onColor="#f774d7"

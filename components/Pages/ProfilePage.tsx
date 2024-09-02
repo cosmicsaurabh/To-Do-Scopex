@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthProvider';
 import DeleteUserButton from './DeleteUserButton';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { useTheme } from '../../context/ThemeProvider';
+import GlobalStyle from '../others/GlobalStyle';
 
 export default function ProfilePage() {
   const { user, isLoggedIn } = useAuth();
@@ -18,7 +19,7 @@ export default function ProfilePage() {
   return (
     <SafeAreaView style={[styles.safearea, backgroundStyle]}>
       <View style={styles.header}>
-        <Text style={[styles.tabTitle, { color: theme.colors.text }]}>Profile</Text>
+        <Text style={[styles.tabTitle,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Profile</Text>
         <LogoutButton />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -34,12 +35,12 @@ export default function ProfilePage() {
             />
             </View>
         <View style={styles.userInfo}>
-          <Text style={[styles.label, { color: theme.colors.text }]}>Username:</Text>
-          <Text style={[styles.info, { color: theme.colors.text }]}>{user.username}</Text>
-          <Text style={[styles.label, { color: theme.colors.text }]}>Phone:</Text>
-          <Text style={[styles.info, { color: theme.colors.text }]}>{user.phone}</Text>
-          <Text style={[styles.label, { color: theme.colors.text }]}>Email:</Text>
-          <Text style={[styles.info, { color: theme.colors.text }]}>{user.email}</Text>
+          <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Username:</Text>
+          <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.username}</Text>
+          <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Phone:</Text>
+          <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.phone}</Text>
+          <Text style={[styles.labe,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Email:</Text>
+          <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.email}</Text>
         </View>
 
       </ScrollView>
@@ -85,8 +86,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   label: {
-    fontWeight: 'bold',
-    fontSize: 16,
+    // fontWeight: 'bold',
+    // fontSize: 16,
   },
   info: {
     fontSize: 16,
