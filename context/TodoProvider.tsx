@@ -54,8 +54,8 @@ const TodoProvider = ({ children }) => {
     // setIsChangedSomething(!isChangedSomething);
   };
   
-  const addTodoItem = async (title) => {
-    const newTodo = { id: UUID.v4(), title, done: false, bookmarked: false };
+  const addTodoItem = async (title,bookmarked) => {
+    const newTodo = { id: UUID.v4(), title, done: false, bookmarked };
     const updatedTodos = [...allTodos, newTodo];
     await saveTodos(updatedTodos);
     // setIsChangedSomething(!isChangedSomething);

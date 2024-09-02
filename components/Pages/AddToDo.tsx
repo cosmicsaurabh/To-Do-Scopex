@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, SafeAreaView, TextInput, StyleSheet, View, Alert, TouchableOpacity, Text } from 'react-native';
+import { SafeAreaView, TextInput, StyleSheet, View, Alert, TouchableOpacity, Text } from 'react-native';
 import { useRoute,useNavigation } from '@react-navigation/native';
 // import { addTodoItem } from '../../helper';
 import { useTodo } from '../../context/TodoProvider';
@@ -9,14 +9,15 @@ function AddToDo() {
   const navigation = useNavigation();
   const route = useRoute();
   const [title, setTitle] = useState('');
-  const { onUpdate } = route.params as { onUpdate: () => void };
+  const { onUpdate,inbookmarked } = route.params as { onUpdate: () => void ,inbookmarked: boolean};
+  // console.log("inbookamrked    ",inbookmarked);
   const handleAdd = async () => {
     try {
       if (title.trim().length === 0) {
         Alert.alert('Validation Error', 'Title cannot be empty');
         return;
       }
-      await addTodoItem(title);
+      await addTodoItem(title,inbookmarked);
       onUpdate(title);
       navigation.goBack();
     } catch (error) {

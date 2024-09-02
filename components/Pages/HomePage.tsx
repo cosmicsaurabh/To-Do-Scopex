@@ -24,6 +24,7 @@ type TodoItem = {
 function HomePage({navigation}: any): JSX.Element {
   const {todos, bookmarkTodoItem, loadMoreTodos} =
     useTodo();
+
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -58,6 +59,8 @@ function HomePage({navigation}: any): JSX.Element {
   };
 
   const handleAddToDo = async () => {
+    const inbookmarked = isBookmarkedToggled?true:false;
+    console.log("->>>>>>>>>>>",inbookmarked)
     try {
       navigation.navigate('AddToDo', {
         onUpdate: (newlyaddedtitle: newtitle) => {
@@ -67,6 +70,8 @@ function HomePage({navigation}: any): JSX.Element {
             text2: `${truncateText(newlyaddedtitle, 20)} has been added.`,
           });
         },
+      inbookmarked
+        
       });
     } catch (error) {
       console.error('Error add todo item', error);
@@ -78,7 +83,7 @@ function HomePage({navigation}: any): JSX.Element {
     }
   };
 
-  const handleEditToDo = async item => {
+  const handleEditToDo = async (item) => {
     try {
       const previousTitle = item.title;
       navigation.navigate('EditToDo', {
@@ -147,12 +152,18 @@ function HomePage({navigation}: any): JSX.Element {
   };
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [isBookmarkedToggled,setIsBookmarkedToggled] = useState(false);
+  let bookmarkedtodos  =[];
+  if(isBookmarkedToggled){
+    bookmarkedtodos = todos.filter(that => that.bookmarked)
+  } 
+
 
   const handleLoadMore = async () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    const s = await loadMoreTodos();
-    console.log(s);
+    await loadMoreTodos();
+  
     setLoading(false);
   };
 
@@ -204,10 +215,20 @@ function HomePage({navigation}: any): JSX.Element {
       />
       <View style={styles.header}>
         <Text style={styles.tabTitle}>Home</Text>
+        <ToggleSwitch
+          isOn={isBookmarkedToggled}
+          onColor="#f774d7"
+          offColor="#fbc02d"
+          // icon = {isBookmarkedToggled ?"file-tray-full-outline" : "bookmark-outline"} 
+          label={isBookmarkedToggled ?"BookMarked To-Do" : "All To-Do"} 
+          labelStyle={{color: '#333', fontWeight: '600',}}
+          size="medium"
+          onToggle={isOn => setIsBookmarkedToggled(!isBookmarkedToggled)}
+        />
       </View>
       <View style={styles.sectionContainer}>
         <FlatList
-          data={todos}
+          data={isBookmarkedToggled?bookmarkedtodos:todos}
           renderItem={renderTodoItem}
           keyExtractor={item => item.id}
           onEndReached={handleLoadMore}
