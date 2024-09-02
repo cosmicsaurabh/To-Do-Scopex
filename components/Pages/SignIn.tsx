@@ -8,7 +8,6 @@ import { useTheme } from '../../context/ThemeProvider';
 const SignIn = () => {
   const navigation = useNavigation();
   const {theme}  =useTheme();
-  console.log(theme);
   const [form, setForm] = useState({
     email: '',
     password: ''
