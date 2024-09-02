@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { ScrollView, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import {SafeAreaView, ScrollView, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import FormField from '../FormField';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthProvider';
-
+import { useTheme } from '../../context/ThemeProvider';
 const SignUp = () => {
   const [form, setForm] = useState({
     email: '',
@@ -13,7 +13,12 @@ const SignUp = () => {
   });
 
   const { signup } = useAuth();
+  const {theme} = useTheme();
   const navigation = useNavigation();
+
+  const backgroundStyle = {
+    backgroundColor: theme.colors.background,
+  };
 
   const handleSignUp = () => {
     if (form.email && form.password && form.username && form.phone) {
@@ -22,13 +27,14 @@ const SignUp = () => {
     } else {
       alert('Please fill in all fields');
     }
-    // console.log(form);
   };
 
   return (
+    <SafeAreaView style={[styles.safearea, backgroundStyle]}>
     <ScrollView contentContainerStyle={styles.container}>
+      
       <View style={styles.formContainer}>
-        <Text style={styles.title}>Register ToDo</Text>
+
 
         <FormField
           title="Username"
@@ -56,7 +62,7 @@ const SignUp = () => {
           secureTextEntry
         />
         <TouchableOpacity onPress={handleSignUp} style={styles.signupButton}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+        <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Sign Up</Text>
         </TouchableOpacity>
 
         <View style={styles.signinContainer}>
@@ -67,6 +73,7 @@ const SignUp = () => {
         </View>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -75,20 +82,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#f4f4f4', // Light background for contrast
   },
   formContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor:'#1E1E2D',
     padding: 20,
     borderRadius: 10,
     elevation: 5,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#333333',
   },
   signupButton: {
     marginVertical: 20,
@@ -100,7 +99,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: "#ffffff",
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
@@ -112,7 +110,7 @@ const styles = StyleSheet.create({
   },
   signinText: {
     fontSize: 16,
-    color: '#333333',
+    color: "#CDCDE0",
   },
   signinButton: {
     fontSize: 16,

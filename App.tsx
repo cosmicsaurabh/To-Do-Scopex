@@ -4,11 +4,10 @@ import RootNavigator from './components/Navigation/RootNavigator';
 import SplashScreen from './components/SplashScreen/SplashScreen';
 import Toast from 'react-native-toast-message';
 import TodoProvider from './context/TodoProvider';
-import { ThemeProvider } from './context/ThemeProvider';
+import ThemeProvider from './context/ThemeProvider';
 
 function App(): JSX.Element {
   const [showSplash, setShowSplash] = useState(true);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
@@ -33,3 +32,4 @@ function App(): JSX.Element {
 }
 
 export default App;
+

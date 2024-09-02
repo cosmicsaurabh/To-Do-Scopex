@@ -4,15 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthProvider';
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SplashScreen from '../SplashScreen/SplashScreen';
+import { StatusBar } from 'react-native';
+import { useTheme } from '../../context/ThemeProvider';
 
 
-const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
   const { isLoggedIn,isLoading} = useAuth();
-
-  
+  const { theme } = useTheme();
+ 
   if (isLoading) {
     return <SplashScreen />; 
   }
@@ -25,7 +25,11 @@ const RootNavigator = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={theme} >
+      <StatusBar
+        barStyle={theme.dark ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background}
+      />
       {isLoggedIn ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );

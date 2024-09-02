@@ -1,26 +1,25 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { Appearance, useColorScheme } from 'react-native';
+// ThemeProvider.js
+import React, { createContext, useState, useContext, useMemo } from 'react';
+import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 
 const ThemeContext = createContext();
+export const useTheme = () => useContext(ThemeContext);
 
-export const ThemeProvider = ({ children }) => {
-  const systemTheme = useColorScheme();
-  const [theme, setTheme] = useState(systemTheme);
-
-  useEffect(() => {
-    const currentTheme = Appearance.getColorScheme();
-    setTheme(currentTheme);
-  }, []);
+const ThemeProvider = ({ children }) => {
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   const toggleTheme = () => {
-    setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
+    setIsDarkTheme(!isDarkTheme);
   };
 
+  const theme = useMemo(() => (isDarkTheme ? DarkTheme : DefaultTheme), [isDarkTheme]);
+
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, isDarkTheme }}>
       {children}
     </ThemeContext.Provider>
   );
 };
 
-export const useTheme = () => useContext(ThemeContext);
+
+export default ThemeProvider;

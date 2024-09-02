@@ -2,7 +2,6 @@ import React, { useState} from 'react';
 import {
   SafeAreaView,
   FlatList,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTodo} from '../../context/TodoProvider';
 import ToggleSwitch from 'toggle-switch-react-native';
+import { useTheme } from '../../context/ThemeProvider';
 type TodoItem = {
   id: string;
   title: string;
@@ -24,11 +24,7 @@ type TodoItem = {
 function HomePage({navigation}: any): JSX.Element {
   const {todos, bookmarkTodoItem, loadMoreTodos} =
     useTodo();
-
-  const isDarkMode = useColorScheme() === 'dark';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+    const {theme} = useTheme();
 
   const truncateText = (text: string, maxLength: number) => {
     return text.length > maxLength
@@ -171,12 +167,10 @@ function HomePage({navigation}: any): JSX.Element {
     <TouchableOpacity key={item.id} onPress={() => handleReadToDo(item.title)}>
       <View style={styles.todoItem}>
         <View style={styles.todoContent}>
-          <Text style={styles.sectionDescription}>
+        <Text style={[styles.sectionDescription, { color: theme.colors.text }]}>
             {truncateText(item.title, 40)}
           </Text>
-          <Text style={styles.sectionDescription}>
-            {item.bookmarked ? 'true' : 'false'}
-          </Text>
+          
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -189,18 +183,18 @@ function HomePage({navigation}: any): JSX.Element {
                   : 'heart-circle-outline'
               }
               size={24}
-              color="white"
+              color={theme.dark? "black" : "white"}
             />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => handleDeleteToDo(item)}
             style={styles.deleteButton}>
-            <Icon name="trash-outline" size={24} color="white" />
+            <Icon name="trash-outline" size={24} color={theme.dark? "black" : "white"}/>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => handleEditToDo(item)}
             style={styles.editButton}>
-            <Icon name="create-outline" size={24} color="white" />
+            <Icon name="create-outline" size={24} color={theme.dark? "black" : "white"}/>
           </TouchableOpacity>
         </View>
       </View>
@@ -209,21 +203,16 @@ function HomePage({navigation}: any): JSX.Element {
 
   return (
     <SafeAreaView style={styles.safearea}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
       <View style={styles.header}>
-        <Text style={styles.tabTitle}>Home</Text>
+      <Text style={[styles.tabTitle, { color: theme.colors.text }]}>Home</Text>
         <ToggleSwitch
           isOn={isBookmarkedToggled}
           onColor="#f774d7"
-          offColor="#fbc02d"
-          // icon = {isBookmarkedToggled ?"file-tray-full-outline" : "bookmark-outline"} 
+          offColor="#FF9C01"
           label={isBookmarkedToggled ?"BookMarked To-Do" : "All To-Do"} 
-          labelStyle={{color: '#333', fontWeight: '600',}}
+          labelStyle={ {color: theme.colors.text, fontWeight: '600' }}
           size="medium"
-          onToggle={isOn => setIsBookmarkedToggled(!isBookmarkedToggled)}
+          onToggle={() => setIsBookmarkedToggled(!isBookmarkedToggled)}
         />
       </View>
       <View style={styles.sectionContainer}>
@@ -241,7 +230,7 @@ function HomePage({navigation}: any): JSX.Element {
 
       <View style={styles.fab}>
         <TouchableOpacity onPress={handleAddToDo}>
-          <Icon name="add-outline" size={35} color="white" />
+          <Icon name="add-outline" size={35}color={theme.dark? "black" : "white"} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -314,7 +303,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#fbc02d',
     elevation: 4,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
@@ -328,50 +317,8 @@ const styles = StyleSheet.create({
     color: '#333',
   },
 
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  todoItem: {
-    fontSize: 18,
-    fontWeight: '400',
-    borderBottomWidth: 1,
-    padding: 8,
-    borderBottomColor: 'gray',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  todoContent: {
-    flex: 1,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-  },
-  bookmarkButton: {
-    backgroundColor: '#f774d7',
-    borderRadius: 4,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    marginRight: 8,
-    elevation: 2,
-  },
-  deleteButton: {
-    backgroundColor: 'red',
-    borderRadius: 4,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    marginRight: 8,
-    elevation: 2,
-  },
-  editButton: {
-    backgroundColor: '#4CAF50',
-    borderRadius: 4,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    elevation: 2,
-  },
+  
+  
   fab: {
     position: 'absolute',
     right: 25,

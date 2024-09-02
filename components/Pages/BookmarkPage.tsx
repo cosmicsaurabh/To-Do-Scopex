@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   SafeAreaView,
   FlatList,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,6 +13,9 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useTodo } from '../../context/TodoProvider';
 import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '../../context/ThemeProvider';
+
+
 type TodoItem = {
   id: string;
   title: string;
@@ -21,13 +23,14 @@ type TodoItem = {
   bookmarked:boolean;
 };
 
-function Bookmark({ navigation }: any): JSX.Element {
-  const {todos, bookmarkTodoItem, loadMoreTodos} =
-  useTodo();
-const isDarkMode = useColorScheme() === 'dark';
-const backgroundStyle = {
-  backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-};
+function BookmarkPage({ navigation }: any): JSX.Element {
+  const { theme } = useTheme();
+  const {todos, bookmarkTodoItem, loadMoreTodos} = useTodo();
+
+  const backgroundStyle = {
+    backgroundColor: theme.colors.background,
+  };
+
 
 const bookmarkedtodos = todos.filter(that => that.bookmarked)
 
@@ -161,14 +164,17 @@ const handleLoadMore = async () => {
 const renderTodoItem = ({item}) => (
   <TouchableOpacity key={item.id} onPress={() => handleReadToDo(item.title)}>
     <View style={styles.todoItem}>
+
       <View style={styles.todoContent}>
-        <Text style={styles.sectionDescription}>
+
+        <Text style={[styles.sectionDescription, { color: theme.colors.text }]}>
+        {/* <Text style={styles.sectionDescription}> */}
           {truncateText(item.title, 40)}
         </Text>
-        <Text style={styles.sectionDescription}>
-          {item.bookmarked ? 'true' : 'false'}
-        </Text>
+        
       </View>
+
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() => handleBookmarkToDo(item)}
@@ -180,18 +186,19 @@ const renderTodoItem = ({item}) => (
                 : 'heart-circle-outline'
             }
             size={24}
-            color="white"
+            color={theme.dark? "black" : "white"}
           />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleDeleteToDo(item)}
           style={styles.deleteButton}>
-          <Icon name="trash-outline" size={24} color="white" />
+          <Icon name="trash-outline" size={24} color={theme.dark? "black" : "white"} />
+          {/* <Icon name="trash-outline" size={24} color="white" /> */}
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleEditToDo(item)}
           style={styles.editButton}>
-          <Icon name="create-outline" size={24} color="white" />
+          <Icon name="create-outline" size={24} color={theme.dark? "black" : "white"} />
         </TouchableOpacity>
       </View>
     </View>
@@ -199,13 +206,10 @@ const renderTodoItem = ({item}) => (
 );
 
 return (
-  <SafeAreaView style={styles.safearea}>
-    <StatusBar
-      barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-      backgroundColor={backgroundStyle.backgroundColor}
-    />
+  <SafeAreaView style={[styles.safearea, backgroundStyle]}>
+
     <View style={styles.header}>
-      <Text style={styles.tabTitle}>Bookmarks</Text>
+      <Text style={[styles.tabTitle, { color: theme.colors.text }]}>Bookmarks</Text>
     </View>
     <View style={styles.sectionContainer}>
       <FlatList
@@ -222,7 +226,7 @@ return (
 
     <View style={styles.fab}>
       <TouchableOpacity onPress={handleAddToDo}>
-        <Icon name="add-outline" size={35} color="white" />
+        <Icon name="add-outline" size={35} color={theme.dark? "black" : "white"} />
       </TouchableOpacity>
     </View>
   </SafeAreaView>
@@ -295,7 +299,7 @@ header: {
   justifyContent: 'space-between',
   alignItems: 'center',
   paddingHorizontal: 20,
-  backgroundColor: '#fff',
+  backgroundColor: '#fbc02d',
   elevation: 4,
   shadowColor: '#000',
   shadowOffset: {width: 0, height: 2},
@@ -309,50 +313,6 @@ tabTitle: {
   color: '#333',
 },
 
-sectionDescription: {
-  marginTop: 8,
-  fontSize: 18,
-  fontWeight: '400',
-},
-todoItem: {
-  fontSize: 18,
-  fontWeight: '400',
-  borderBottomWidth: 1,
-  padding: 8,
-  borderBottomColor: 'gray',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-},
-todoContent: {
-  flex: 1,
-},
-buttonContainer: {
-  flexDirection: 'row',
-},
-bookmarkButton: {
-  backgroundColor: '#f774d7',
-  borderRadius: 4,
-  paddingVertical: 4,
-  paddingHorizontal: 8,
-  marginRight: 8,
-  elevation: 2,
-},
-deleteButton: {
-  backgroundColor: 'red',
-  borderRadius: 4,
-  paddingVertical: 4,
-  paddingHorizontal: 8,
-  marginRight: 8,
-  elevation: 2,
-},
-editButton: {
-  backgroundColor: '#4CAF50',
-  borderRadius: 4,
-  paddingVertical: 4,
-  paddingHorizontal: 8,
-  elevation: 2,
-},
 fab: {
   position: 'absolute',
   right: 25,
@@ -367,4 +327,4 @@ fab: {
 },
 });
 
-export default Bookmark;
+export default BookmarkPage;

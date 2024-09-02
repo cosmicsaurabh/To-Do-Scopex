@@ -2,17 +2,19 @@ import React from 'react';
 import { useAuth } from '../../context/AuthProvider';
 import {  Text,StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '../../context/ThemeProvider';
 
 const DeleteUserButton = ()=>{
     const {deleteuser} = useAuth();
+    const {theme} = useTheme();
     const handleDeleteUser = () => {
         deleteuser();
       };
 
     return (
         <TouchableOpacity onPress={handleDeleteUser} style={styles.deleteuserButton}>
-          <Icon name="warning-outline" size={24} color="white" />
-          <Text style={styles.deleteuserText}>Delete User !!!</Text>
+          <Icon name="warning-outline" size={24} color={theme.dark? "black" : "white"} />
+          <Text style={[styles.deleteuserText ,{ color: theme.colors.text }]}>Delete User !!!</Text>
         </TouchableOpacity>
       );
     };

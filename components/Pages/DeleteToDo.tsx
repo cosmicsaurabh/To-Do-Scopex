@@ -27,7 +27,7 @@ function DeleteToDo() {
             }} style={styles.deleteButton}>
             <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
-                </View>
+          </View>
       </View>
     </SafeAreaView>
   );

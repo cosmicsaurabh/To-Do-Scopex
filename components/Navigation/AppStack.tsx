@@ -2,15 +2,15 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import { useTheme } from '../../context/ThemeProvider';
 
 import HomePage from '../Pages/HomePage';
 import AddToDo from '../Pages/AddToDo';
 import ReadToDo from '../Pages/ReadToDo';
 import EditToDo from '../Pages/EditToDo';
 import DeleteToDo from '../Pages/DeleteToDo';
-import Profile from '../Pages/Profile';
-import Bookmark from '../Pages/Bookmark';
+import ProfilePage from '../Pages/ProfilePage';
+import BookmarkPage from '../Pages/BookmarkPage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -26,19 +26,30 @@ const HomeStack = () => (
 );
 const ProfileStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Profile" component={Profile} />
+    <Stack.Screen name="Profile" component={ProfilePage} />
   </Stack.Navigator>
 );
 const BookmarkStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Bookmark" component={Bookmark} />
+    <Stack.Screen name="Bookmark" component={BookmarkPage} />
     
   </Stack.Navigator>
 );
 
-const AppStack = () => (
-  <Tab.Navigator  screenOptions={{ headerShown: false ,
-    tabBarHideOnKeyboard: true, tabBarActiveTintColor: '#fbc02d'
+const AppStack = () => {
+  const { theme } = useTheme(); 
+  return(
+  <Tab.Navigator  
+  screenOptions={{ 
+    headerShown: false ,
+    tabBarHideOnKeyboard: true,
+    //  tabBarActiveTintColor: '#fbc02d',
+    tabBarActiveTintColor:'#fbc02d',
+    tabBarInactiveTintColor: theme.colors.text,
+     tabBarStyle: {
+      backgroundColor: theme.colors.background,
+      borderTopColor: theme.colors.border,
+    },
   }}>
     <Tab.Screen name="To-Do" component={HomeStack} options={{
         tabBarIcon: ({ color, size }) => (
@@ -57,5 +68,6 @@ const AppStack = () => (
       }}  /> 
   </Tab.Navigator>
 );
+}
 
 export default AppStack;

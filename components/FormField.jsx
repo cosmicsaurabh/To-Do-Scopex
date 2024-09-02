@@ -35,11 +35,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   formArea: {
-    // elevation: 1,
     borderRadius: 10,
     paddingVertical: 5,
     paddingHorizontal: 15,
-    // backgroundColor: '#abc3fd',
     borderWidth: 1,
     borderColor: '#abc3fd', 
   },
