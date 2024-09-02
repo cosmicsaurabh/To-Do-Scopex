@@ -3,8 +3,13 @@ import { SafeAreaView, TextInput, StyleSheet, View, Alert, TouchableOpacity, Tex
 import { useRoute,useNavigation } from '@react-navigation/native';
 // import { addTodoItem } from '../../helper';
 import { useTodo } from '../../context/TodoProvider';
+import { useTheme } from '../../context/ThemeProvider';
 function AddToDo() {
   const {   addTodoItem } = useTodo();
+  const {theme} = useTheme();
+  const backgroundStyle = {
+    backgroundColor: theme.colors.background,
+  };
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -27,7 +32,7 @@ function AddToDo() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safearea, backgroundStyle]}>
       <View style={styles.container}>
         <TextInput
           style={styles.input}
@@ -38,7 +43,7 @@ function AddToDo() {
           placeholderTextColor="#999999"
         />
         <TouchableOpacity onPress={handleAdd} style={styles.addButton}>
-          <Text style={styles.buttonText}>Add new to-do</Text>
+          <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Add new to-do</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -48,16 +53,17 @@ function AddToDo() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    
   },
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#232533',
     borderRadius: 10,
     elevation: 5,
     margin: 20,
+    marginBottom:50,
   },
   input: {
     height: 200,
@@ -66,7 +72,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     marginBottom: 20,
-    backgroundColor: '#f4f4f4',
+    color: "#CDCDE0",
     fontSize: 16,
     color: '#333333',
   },
@@ -80,7 +86,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: "#ffffff",
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",

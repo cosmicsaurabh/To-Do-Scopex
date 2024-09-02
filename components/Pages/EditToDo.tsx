@@ -3,11 +3,12 @@ import { SafeAreaView, TextInput, StyleSheet, View, Alert, TouchableOpacity, Tex
 import { useNavigation, useRoute } from '@react-navigation/native';
 // import { updateTodoItem } from '../../helper';
 import { useTodo } from '../../context/TodoProvider';
-
+import { useTheme } from '../../context/ThemeProvider';
 function EditToDo() {
   const navigation = useNavigation();
   const route = useRoute();
   const {   updateTodoItem } = useTodo();
+  const{theme} = useTheme();
 
   const { item, onUpdate } = route.params as { item: TodoItem, onUpdate: () => void };
 
@@ -28,9 +29,12 @@ function EditToDo() {
       Alert.alert('Error', 'An error occurred while updating the todo item');
     }
   };
+  const backgroundStyle = {
+    backgroundColor: theme.colors.background,
+  };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safearea, backgroundStyle]}>
       <View style={styles.container}>
         <TextInput
           style={styles.input}
@@ -42,7 +46,7 @@ function EditToDo() {
           numberOfLines={5}
         />
         <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
-          <Text style={styles.buttonText}>Update</Text>
+          <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Update</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -52,27 +56,27 @@ function EditToDo() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f4f4f4', // Consistent background
   },
   container: {
     flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#ffffff', // Consistent form background
+    backgroundColor: '#232533', // Consistent form background
     borderRadius: 10,
     elevation: 5,
     margin: 20,
+    marginBottom:50,
   },
   input: {
     height: 200,
+    elevation:5,
     borderColor: '#cccccc',
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 12,
     marginBottom: 20,
-    backgroundColor: '#f4f4f4',
     fontSize: 16,
-    color: '#333333',
+    color: "#CDCDE0",
     multiline:'true',
   },
   updateButton: {
@@ -84,7 +88,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: "#ffffff",
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",

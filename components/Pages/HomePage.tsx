@@ -6,9 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  useColorScheme,
 } from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTodo} from '../../context/TodoProvider';
@@ -56,7 +54,7 @@ function HomePage({navigation}: any): JSX.Element {
 
   const handleAddToDo = async () => {
     const inbookmarked = isBookmarkedToggled?true:false;
-    console.log("->>>>>>>>>>>",inbookmarked)
+    // console.log("->>>>>>>>>>>",inbookmarked)
     try {
       navigation.navigate('AddToDo', {
         onUpdate: (newlyaddedtitle: newtitle) => {

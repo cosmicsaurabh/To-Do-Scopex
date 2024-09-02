@@ -3,29 +3,34 @@ import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-na
 import { useNavigation, useRoute } from '@react-navigation/native';
 // import { deleteTodoItem } from '../../helper';
 import { useTodo } from '../../context/TodoProvider';
-
+import { useTheme } from '../../context/ThemeProvider';
 function DeleteToDo() {
   const navigation = useNavigation();
   const {   deleteTodoItem } = useTodo();
+  const{theme}  = useTheme();
   const route = useRoute();
   const { item, onUpdate } = route.params as { item: { id: string}, onUpdate: () => void };
 
+  const backgroundStyle = {
+    backgroundColor: theme.colors.background,
+  };
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safearea, backgroundStyle]}>
 
       <View style={styles.container}>
         <Text style={styles.confirmationText}>Are you sure you want to delete this To-Do?</Text>
         
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cancelButton}>
-            <Text style={styles.buttonText}>Cancel</Text>
+            <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={async () => {
               await deleteTodoItem(item.id);
               onUpdate();
               navigation.goBack();
             }} style={styles.deleteButton}>
-            <Text style={styles.buttonText}>Delete</Text>
+            <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Delete</Text>
           </TouchableOpacity>
           </View>
       </View>
@@ -45,7 +50,7 @@ const styles = StyleSheet.create({
     // height:200,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#232533',
     borderRadius: 10,
     elevation: 5,
     margin: 20,
