@@ -5,9 +5,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 
 import HomePage from '../Pages/HomePage';
+import AddToDo from '../Pages/AddToDo';
+import ReadToDo from '../Pages/ReadToDo';
 import EditToDo from '../Pages/EditToDo';
 import DeleteToDo from '../Pages/DeleteToDo';
-import AddToDo from '../Pages/AddToDo';
 import Profile from '../Pages/Profile';
 import Bookmark from '../Pages/Bookmark';
 
@@ -20,6 +21,7 @@ const HomeStack = () => (
     <Stack.Screen name="EditToDo" component={EditToDo} />
     <Stack.Screen name="DeleteToDo" component={DeleteToDo} />
     <Stack.Screen name="AddToDo" component={AddToDo} />
+    <Stack.Screen name="ReadToDo" component={ReadToDo} />
   </Stack.Navigator>
 );
 const ProfileStack = () => (
@@ -30,9 +32,7 @@ const ProfileStack = () => (
 const BookmarkStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Bookmark" component={Bookmark} />
-    <Stack.Screen name="EditToDo" component={EditToDo} />
-    <Stack.Screen name="DeleteToDo" component={DeleteToDo} />
-    <Stack.Screen name="AddToDo" component={AddToDo} />
+    
   </Stack.Navigator>
 );
 

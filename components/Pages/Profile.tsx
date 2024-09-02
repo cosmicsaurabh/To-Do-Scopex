@@ -3,9 +3,11 @@ import React from 'react';
 import LogoutButton from './LogoutButton';
 import { useAuth } from '../../context/AuthProvider';
 import DeleteUserButton from './DeleteUserButton';
-
+import ThemeToggle from '../others/ThemeToggle';
+import useThemedStyles from '../others/useThemedStyles';
 export default function Profile() {
   const { user, isLoggedIn } = useAuth();
+  // const styles = useThemedStyles();
 
   if (!isLoggedIn || !user) return null;
 
@@ -16,6 +18,7 @@ export default function Profile() {
         <LogoutButton />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ThemeToggle />
         <View style={styles.userInfo}>
           <Text style={styles.label}>Username:</Text>
           <Text style={styles.info}>{user.username}</Text>

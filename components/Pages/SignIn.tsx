@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-nati
 import { useNavigation } from '@react-navigation/native';
 import FormField from '../FormField';
 import { useAuth } from '../../context/AuthProvider';
+import { useTheme } from '../../context/ThemeProvider'; // Import your custom theme hook
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -11,6 +12,8 @@ const SignIn = () => {
     password: ''
   });
   const { signin } = useAuth();
+  const { theme } = useTheme(); // Access the current theme
+  const styles = createStyles(theme); // Generate styles based on the current theme
 
   const handleLogin = async () => {
     if (form.email && form.password) {
@@ -58,15 +61,16 @@ const SignIn = () => {
   );
 };
 
-const styles = StyleSheet.create({
+// Create themed styles based on the current theme
+const createStyles = (theme) => StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#f4f4f4', // Light background for contrast
+    backgroundColor: theme === 'dark' ? '#333333' : '#f4f4f4', // Conditional background color
   },
   formContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: theme === 'dark' ? '#444444' : '#ffffff', // Conditional form background
     padding: 20,
     borderRadius: 10,
     elevation: 5,
@@ -76,7 +80,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    color: '#333333',
+    color: theme === 'dark' ? '#fbc02d' : '#333333', // Conditional text color
   },
   loginButton: {
     marginVertical: 20,
@@ -100,7 +104,7 @@ const styles = StyleSheet.create({
   },
   signupText: {
     fontSize: 16,
-    color: '#333333',
+    color: theme === 'dark' ? '#fbc02d' : '#333333', // Conditional text color
   },
   signupButton: {
     fontSize: 16,

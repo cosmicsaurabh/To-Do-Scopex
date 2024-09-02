@@ -3,11 +3,6 @@ import { SafeAreaView, TextInput, StyleSheet, View, Alert, TouchableOpacity, Tex
 import { useNavigation, useRoute } from '@react-navigation/native';
 // import { updateTodoItem } from '../../helper';
 import { useTodo } from '../../context/TodoProvider';
-type TodoItem = {
-  id: string;
-  title: string;
-  done: boolean;
-};
 
 function EditToDo() {
   const navigation = useNavigation();

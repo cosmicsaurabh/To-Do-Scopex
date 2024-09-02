@@ -2,12 +2,9 @@ import React from 'react';
 import { useAuth } from '../../context/AuthProvider';
 import {  Text,StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {  useRoute } from '@react-navigation/native';
 
 const DeleteUserButton = ()=>{
-    // const route = useRoute();
     const {deleteuser} = useAuth();
-    // const { user } = route.params as { user: { email: string} };
     const handleDeleteUser = () => {
         deleteuser();
       };
@@ -33,7 +30,6 @@ const styles = StyleSheet.create({
       borderWidth:2,
       borderStyle:'dashed',
       padding: 10,
-      // Ensure proper height
       height: '100%', 
       justifyContent: 'center',
     },
