@@ -39,7 +39,7 @@ export default function ProfilePage() {
           <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.username}</Text>
           <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Phone:</Text>
           <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.phone}</Text>
-          <Text style={[styles.labe,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Email:</Text>
+          <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Email:</Text>
           <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.email}</Text>
           <Image style={{height:100,width:100}} 
         source = {{uri:user?.profilePic}}/>
