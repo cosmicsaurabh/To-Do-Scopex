@@ -1,7 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-// import { deleteTodoItem } from '../../helper';
 import { useTodo } from '../../context/TodoProvider';
 import { useTheme } from '../../context/ThemeProvider';
 function DeleteToDo() {

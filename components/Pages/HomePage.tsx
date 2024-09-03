@@ -215,7 +215,10 @@ function HomePage({navigation}: any): JSX.Element {
         />
       </View>
       <View style={styles.sectionContainer}>
-        <FlatList
+      {todos.length === 0 ? (
+          <Text style={[styles.emptyMessage, { color: theme.colors.text }]}>{isBookmarkedToggled?'Nothing bookmarked yet !!!':'No To-Do added yet !!!'}</Text>
+        ) : (
+          <FlatList
           data={isBookmarkedToggled?bookmarkedtodos:todos}
           renderItem={renderTodoItem}
           keyExtractor={item => item.id}
@@ -224,7 +227,8 @@ function HomePage({navigation}: any): JSX.Element {
           ListFooterComponent={
             loading ? <Text style={styles.loadingText}>Loading...</Text> : null
           }
-        />
+          />
+        )}
       </View>
 
       <View style={styles.fab}>
@@ -329,6 +333,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 18,
+  },
+  emptyMessage: {
+    textAlign: 'center',
+    fontSize: 18,
+    marginVertical: 20,
   },
 });
 

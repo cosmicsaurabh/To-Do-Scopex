@@ -11,22 +11,21 @@ function EditToDo() {
   const{theme} = useTheme();
 
   const { item, onUpdate } = route.params as { item: TodoItem, onUpdate: () => void };
-
+  const [error, setError] = useState('');
   const [title, setTitle] = useState(item.title);
 
   const handleUpdate = async () => {
     try {
       if (title.trim().length === 0) {
-        Alert.alert('Validation Error', 'Title cannot be empty');
+        setError('Content cannot be empty');
         return;
       }
-    //   console.log(title);
       await updateTodoItem({ ...item, title });
       onUpdate(title);
       navigation.goBack();
     } catch (error) {
       console.error("Error updating todo item", error);
-      Alert.alert('Error', 'An error occurred while updating the todo item');
+      setError('An error occurred while updating the todo item');
     }
   };
   const backgroundStyle = {
@@ -45,6 +44,7 @@ function EditToDo() {
           placeholderTextColor="#999999"
           numberOfLines={5}
         />
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
         <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
           <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Update</Text>
         </TouchableOpacity>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#232533', // Consistent form background
+    backgroundColor: '#232533', 
     borderRadius: 10,
     elevation: 5,
     margin: 20,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     multiline:'true',
   },
   updateButton: {
-    backgroundColor: '#fbc02d', // Consistent button color
+    backgroundColor: '#fbc02d', 
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 15,
@@ -91,6 +91,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'center', // Center-align error message
   },
 });
 

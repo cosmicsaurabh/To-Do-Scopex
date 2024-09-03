@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { SafeAreaView,View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormField from '../FormField';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../../context/AuthProvider';
 import { useTheme } from '../../context/ThemeProvider';
 
 const SignIn = () => {
   const navigation = useNavigation();
   const {theme}  =useTheme();
+  const [errorText, setErrorText] = useState('');
   const [form, setForm] = useState({
     email: '',
     password: ''
@@ -17,24 +19,43 @@ const SignIn = () => {
     backgroundColor: theme.colors.background,
   };
 
-  const handleLogin = async () => {
-    if (form.email && form.password) {
-      const success = await signin(form.email, form.password);
-      if (success) {
-      } else {
-        alert('Invalid email or password');
-      }
-    } else {
-      alert('Please fill in both email and password.');
-    }
+  const isValidEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
   };
-  const handleGoogleSignIn = async () => {
-    const success = await googleSignIn();
-    if (success) {
-      // Navigate to the app's main screen
-    } else {
-      alert('Failed to sign in with Google');
+
+  const handleLogin = async () => {
+    if (!isValidEmail(form.email)) {
+      setErrorText('Please enter a valid email address.');
+      return;
     }
+    if (!form.email || !form.password) {
+      setErrorText('Please fill in both email and password.');
+      return;
+    }
+    setErrorText('');
+    try{
+      const success = await signin(form.email, form.password);
+      if ( !success) {
+        setErrorText("Credentials don't match 🧐... try again");
+      } 
+    } catch (error) {
+      console.error('Login Error:', error);
+      setErrorText('Something went Wrong from our side.....try again later');
+    }
+    
+  };
+
+  const handleGoogleSignIn = async () => {
+    try{
+    const success = await googleSignIn();
+    if ( !success) {
+      setErrorText('Failed to sign in with Google.....try again later');
+    } 
+  } catch (error) {
+    console.error('Google Sign-In Error:', error);
+    setErrorText('Something went Wrong from our side.....try again later');
+  }
   };
 
   return (
@@ -57,17 +78,23 @@ const SignIn = () => {
           secureTextEntry
         />
 
+          {errorText ? 
+          (<Text style={styles.errorText}>{errorText}</Text>
+           ) :( null)
+          }
+
         <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
           <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Log in</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleGoogleSignIn} style={styles.loginButton}>
-            <Text style={styles.buttonText}>Sign in with Google</Text>
+
+        <TouchableOpacity onPress={handleGoogleSignIn} style={styles.googleButton}>
+        <Icon name="logo-google" size={24} color="white" />
+            <Text style={styles.buttonText}> Log In</Text>
           </TouchableOpacity>
 
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>Don't have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            {/* <Text style={[styles.signupButton,{fontFamily:"FiraCode-VariableFont_wght"}]} >Sign up</Text> */}
             <Text style={styles.signupButton} >Sign up</Text>
           </TouchableOpacity>
         </View>
@@ -102,12 +129,23 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 15,
   },
+  googleButton: {
+    flexGrow:1,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+    marginVertical: 20,
+    elevation: 8,
+    backgroundColor: "#db4437",
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+  },
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
-    
   },
   signupContainer: {
     flexDirection: 'row',
@@ -123,6 +161,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#007bff',
     marginLeft: 5,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'center', 
   },
 });
 

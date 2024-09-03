@@ -4,7 +4,14 @@ import FormField from '../FormField';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthProvider';
 import { useTheme } from '../../context/ThemeProvider';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+
 const SignUp = () => {
+  const { signup,googleSignUp } = useAuth();
+  const {theme} = useTheme();
+  const navigation = useNavigation();
+  const [errorText, setErrorText] = useState('');
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -12,28 +19,62 @@ const SignUp = () => {
     username: '',
   });
 
-  const { signup,googleSignUp } = useAuth();
-  const {theme} = useTheme();
-  const navigation = useNavigation();
+  const isValidEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+  const isValidPhone = (phone) => {
+    const regex = /^[0-9]{10}$/;
+    return regex.test(phone);
+  };
+
 
   const backgroundStyle = {
     backgroundColor: theme.colors.background,
   };
 
-  const handleSignUp = () => {
-    if (form.email && form.password && form.username && form.phone) {
-      signup(form);
-      navigation.navigate('SignIn');
-    } else {
-      alert('Please fill in all fields');
+  const handleSignUp = async () => {
+    const { email, password, username, phone } = form;
+
+    if (!email || !password || !username || !phone) {
+      setErrorText('Please fill in all fields.');
+      return;
+    }
+
+    if (!isValidPhone(phone)) {
+      setErrorText('Invalid phone number.');
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setErrorText('Invalid email address.');
+      return;
+    }
+
+    setErrorText('');
+
+    try {
+      const success = await signup(form);
+      if (!success) {
+        setErrorText('Sign up failed. Please try again.');
+      } else {
+        navigation.navigate('SignIn');
+      }
+    } catch (error) {
+      console.error('Sign Up Error:', error);
+      setErrorText('Something went wrong. Please try again later.');
     }
   };
+
   const handleGoogleSignUp = async () => {
-    const success = await googleSignUp();
-    if (success) {
-      // Navigate to the app's main screen
-    } else {
-      alert('Failed to sign up with Google');
+    try {
+      const success = await googleSignUp();
+      if (!success) {
+        setErrorText('Failed to sign up with Google. Please try again.');
+      } 
+    } catch (error) {
+      console.error('Google Sign-Up Error:', error);
+      setErrorText('Something went wrong with Google sign-up. Please try again later.');
     }
   };
 
@@ -69,13 +110,18 @@ const SignUp = () => {
           handleChangeText={(e) => setForm({ ...form, password: e })}
           secureTextEntry
         />
+        {errorText ? (
+            <Text style={styles.errorText}>{errorText}</Text>
+          ) : null}
         <TouchableOpacity onPress={handleSignUp} style={styles.signupButton}>
         <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Sign Up</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleGoogleSignUp} style={styles.signupButton}>
-            <Text style={styles.buttonText}>Sign up with Google</Text>
+        <TouchableOpacity onPress={handleGoogleSignUp} style={styles.googleButton}>
+        <Icon name="logo-google" size={24} color="white" />
+            <Text style={styles.buttonText}> Sign Up</Text>
           </TouchableOpacity>
+
 
 
         <View style={styles.signinContainer}>
@@ -131,6 +177,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#007bff',
     marginLeft: 5,
+  },
+  googleButton: {
+    flexGrow:1,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+    marginVertical: 20,
+    elevation: 8,
+    backgroundColor: "#db4437",
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'center', 
   },
 });
 

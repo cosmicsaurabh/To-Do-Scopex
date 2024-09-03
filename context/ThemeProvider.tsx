@@ -1,7 +1,7 @@
-// ThemeProvider.js
-import React, {useEffect, createContext, useState, useContext, useMemo } from 'react';
+import React, { useEffect, createContext, useState, useContext, useMemo } from 'react';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message'; 
 
 const ThemeContext = createContext();
 export const useTheme = () => useContext(ThemeContext);
@@ -18,11 +18,21 @@ const ThemeProvider = ({ children }) => {
         }
       } catch (error) {
         console.error('Error loading theme:', error);
+        showToast('Failed to load theme. Please try again.');
       }
     };
 
     loadTheme();
   }, []);
+
+  const showToast = (message) => {
+    Toast.show({
+      type: 'error',
+      position: 'bottom',
+      text1: 'Error',
+      text2: message,
+    });
+  };
 
   const toggleTheme = async () => {
     const newTheme = !isDarkTheme;
@@ -31,6 +41,7 @@ const ThemeProvider = ({ children }) => {
       await AsyncStorage.setItem('theme', newTheme ? 'dark' : 'light');
     } catch (error) {
       console.error('Error saving theme:', error);
+      showToast('Failed to save theme. Please try again.');
     }
   };
 
@@ -42,6 +53,5 @@ const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
-
 
 export default ThemeProvider;

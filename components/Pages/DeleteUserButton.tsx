@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthProvider';
-import {  Text,StyleSheet, TouchableOpacity } from 'react-native';
+import {  Text,StyleSheet, TouchableOpacity,Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../context/ThemeProvider';
 
@@ -8,7 +8,22 @@ const DeleteUserButton = ()=>{
     const {deleteuser} = useAuth();
     const {theme} = useTheme();
     const handleDeleteUser = () => {
-        deleteuser();
+      Alert.alert(
+        'Delete User',
+        'This action is Irreversible !!!.',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'Delete',
+            style: 'destructive',
+            onPress: () => deleteuser(),
+          },
+        ],
+        { cancelable: false }
+      );
       };
 
     return (

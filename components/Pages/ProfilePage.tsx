@@ -6,6 +6,8 @@ import DeleteUserButton from './DeleteUserButton';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { useTheme } from '../../context/ThemeProvider';
 import GlobalStyle from '../others/GlobalStyle';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 export default function ProfilePage() {
   const { user, isLoggedIn } = useAuth();
@@ -24,13 +26,19 @@ export default function ProfilePage() {
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.themeToggle}>
-          <Text style={[styles.label, { color: theme.colors.text }]}>Toggle-Theme</Text>
+        <Icon
+              name={isDarkTheme ? 'sunny' : 'moon'}
+              size={40}
+              color={theme.colors.text}
+              style={styles.themeIcon}
+            />
+          
           <ToggleSwitch
             isOn={isDarkTheme}
             offColor="#4E4E50"
             onColor="#E5E5E5"
             labelStyle={{ color: theme.colors.text, fontWeight: '600' }}
-            size="medium"
+            size="large"
             onToggle={toggleTheme}
             />
             </View>
@@ -42,14 +50,13 @@ export default function ProfilePage() {
           <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Email:</Text>
           <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.email}</Text>
           <Image style={{height:100,width:100}} 
-        source = {{uri:user?.profilePic}}/>
+        source = {{uri:user.profilePic}} />
         </View>
 
       </ScrollView>
         <View style={styles.fab}>
          <DeleteUserButton />
       </View>
-    {/* </View> */}
     </SafeAreaView>
   );
 }
@@ -81,15 +88,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   scrollContent: {
-    paddingTop: 50,
+    paddingTop: 60,
     paddingHorizontal: 20,
   },
   userInfo: {
     marginTop: 20,
   },
   label: {
-    // fontWeight: 'bold',
-    // fontSize: 16,
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   info: {
     fontSize: 16,
@@ -97,14 +104,17 @@ const styles = StyleSheet.create({
   },
   themeToggle: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginVertical: 10,
+  },
+  themeIcon: {
+    marginRight: 10,
   },
   fab: {
     position: 'absolute',
     right: 25,
-    bottom: 10,
+    bottom: 25,
     borderRadius: 30,
 
     justifyContent: 'center',

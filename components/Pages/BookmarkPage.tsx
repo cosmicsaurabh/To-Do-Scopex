@@ -6,9 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  useColorScheme,
 } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 // import { getTodoItems } from '../../helper';
 import { useTodo } from '../../context/TodoProvider';
 import Toast from 'react-native-toast-message';
@@ -16,12 +14,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../context/ThemeProvider';
 import GlobalStyle from '../others/GlobalStyle';
 
-type TodoItem = {
-  id: string;
-  title: string;
-  done: boolean;
-  bookmarked:boolean;
-};
+
 
 function BookmarkPage({ navigation }: any): JSX.Element {
   const { theme } = useTheme();
@@ -32,7 +25,7 @@ function BookmarkPage({ navigation }: any): JSX.Element {
   };
 
 
-const bookmarkedtodos = todos.filter(that => that.bookmarked)
+const bookmarkedTodos = todos.filter(that => that.bookmarked)
 
 const truncateText = (text: string, maxLength: number) => {
   return text.length > maxLength
@@ -157,8 +150,19 @@ const handleLoadMore = async () => {
   if (loading || !hasMore) return;
   setLoading(true);
   const s = await loadMoreTodos();
-  // console.log(s);
-  setLoading(false);
+  try {
+    const hasMoreTodos = await loadMoreTodos();
+    setHasMore(hasMoreTodos);
+  } catch (error) {
+    console.error('Error loading more todos', error);
+    Toast.show({
+      type: 'error',
+      text1: 'Error',
+      text2: 'There was an error loading more todos. Please try again.',
+    });
+  } finally {
+    setLoading(false);
+  }
 };
 
 const renderTodoItem = ({item}) => (
@@ -168,7 +172,6 @@ const renderTodoItem = ({item}) => (
       <View style={styles.todoContent}>
 
         <Text style={[styles.sectionDescription, { color: theme.colors.text }]}>
-        {/* <Text style={styles.sectionDescription}> */}
           {truncateText(item.title, 40)}
         </Text>
         
@@ -193,7 +196,6 @@ const renderTodoItem = ({item}) => (
           onPress={() => handleDeleteToDo(item)}
           style={styles.deleteButton}>
           <Icon name="trash-outline" size={24} color={theme.dark? "black" : "white"} />
-          {/* <Icon name="trash-outline" size={24} color="white" /> */}
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleEditToDo(item)}
@@ -212,16 +214,20 @@ return (
       <Text style={[styles.tabTitle,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Bookmarks</Text>
     </View>
     <View style={styles.sectionContainer}>
-      <FlatList
-        data={bookmarkedtodos}
-        renderItem={renderTodoItem}
-        keyExtractor={item => item.id}
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.1}
-        ListFooterComponent={
-          loading ? <Text style={styles.loadingText}>Loading...</Text> : null
-        }
-      />
+    {bookmarkedTodos.length === 0 ? (
+          <Text style={[styles.emptyMessage, { color: theme.colors.text }]}>Nothing bookmarked yet !!!</Text>
+        ) : (
+          <FlatList
+            data={bookmarkedTodos}
+            renderItem={renderTodoItem}
+            keyExtractor={item => item.id}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={
+              loading ? <Text style={styles.loadingText}>Loading...</Text> : null
+            }
+          />
+        )}
     </View>
 
     <View style={styles.fab}>
@@ -324,6 +330,11 @@ fab: {
   justifyContent: 'center',
   alignItems: 'center',
   elevation: 18,
+},
+emptyMessage: {
+  textAlign: 'center',
+  fontSize: 18,
+  marginVertical: 20,
 },
 });
 

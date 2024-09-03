@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../../context/AuthProvider';
 import { useTheme } from '../../context/ThemeProvider';
@@ -9,13 +9,27 @@ const LogoutButton = () => {
   const {theme} = useTheme();
 
   const handleLogout = () => {
-    logout();
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to log out?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: () => logout(),
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
     <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
       <Icon name="log-out-outline" size={24} color={theme.dark? "black" : "white"} />
-      {/* <Text style={styles.logoutText}>L</Text> */}
     </TouchableOpacity>
   );
 };
@@ -29,8 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF5733',
     borderRadius: 10,
     padding: 10,
-    // Ensure proper height
-    height: '100%', // Makes sure it takes the full height of the header
+    height: '100%', 
     justifyContent: 'center',
     borderWidth:1,
     borderStyle:'dashed',
