@@ -4,6 +4,7 @@ import { useRoute,useNavigation } from '@react-navigation/native';
 // import { addTodoItem } from '../../helper';
 import { useTodo } from '../../context/TodoProvider';
 import { useTheme } from '../../context/ThemeProvider';
+import BookmarkPage from './BookmarkPage';
 function AddToDo() {
   const {   addTodoItem } = useTodo();
   const {theme} = useTheme();
@@ -18,10 +19,12 @@ function AddToDo() {
   // console.log("inbookamrked    ",inbookmarked);
   const handleAdd = async () => {
     try {
+      // console.log("inside try")
       if (title.trim().length === 0) {
         Alert.alert('Validation Error', 'Title cannot be empty');
         return;
       }
+      // console.log("inside try", title, inbookmarked);
       await addTodoItem(title,inbookmarked);
       onUpdate(title);
       navigation.goBack();

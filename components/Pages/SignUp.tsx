@@ -12,7 +12,7 @@ const SignUp = () => {
     username: '',
   });
 
-  const { signup } = useAuth();
+  const { signup,googleSignUp } = useAuth();
   const {theme} = useTheme();
   const navigation = useNavigation();
 
@@ -26,6 +26,14 @@ const SignUp = () => {
       navigation.navigate('SignIn');
     } else {
       alert('Please fill in all fields');
+    }
+  };
+  const handleGoogleSignUp = async () => {
+    const success = await googleSignUp();
+    if (success) {
+      // Navigate to the app's main screen
+    } else {
+      alert('Failed to sign up with Google');
     }
   };
 
@@ -65,6 +73,11 @@ const SignUp = () => {
         <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Sign Up</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity onPress={handleGoogleSignUp} style={styles.signupButton}>
+            <Text style={styles.buttonText}>Sign up with Google</Text>
+          </TouchableOpacity>
+
+
         <View style={styles.signinContainer}>
           <Text style={styles.signinText}>Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
@@ -76,6 +89,7 @@ const SignUp = () => {
     </SafeAreaView>
   );
 };
+export default SignUp;
 
 const styles = StyleSheet.create({
   container: {
@@ -120,4 +134,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;

@@ -12,7 +12,7 @@ const SignIn = () => {
     email: '',
     password: ''
   });
-  const { signin } = useAuth();
+  const { signin,googleSignIn } = useAuth();
   const backgroundStyle = {
     backgroundColor: theme.colors.background,
   };
@@ -26,6 +26,14 @@ const SignIn = () => {
       }
     } else {
       alert('Please fill in both email and password.');
+    }
+  };
+  const handleGoogleSignIn = async () => {
+    const success = await googleSignIn();
+    if (success) {
+      // Navigate to the app's main screen
+    } else {
+      alert('Failed to sign in with Google');
     }
   };
 
@@ -52,6 +60,9 @@ const SignIn = () => {
         <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
           <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Log in</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={handleGoogleSignIn} style={styles.loginButton}>
+            <Text style={styles.buttonText}>Sign in with Google</Text>
+          </TouchableOpacity>
 
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>Don't have an account?</Text>
@@ -65,6 +76,7 @@ const SignIn = () => {
     </SafeAreaView>
   );
 };
+export default SignIn;
 
 const styles = StyleSheet.create({
   safearea: {
@@ -114,4 +126,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignIn;

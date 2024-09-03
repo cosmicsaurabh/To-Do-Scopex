@@ -157,7 +157,7 @@ const handleLoadMore = async () => {
   if (loading || !hasMore) return;
   setLoading(true);
   const s = await loadMoreTodos();
-  console.log(s);
+  // console.log(s);
   setLoading(false);
 };
 

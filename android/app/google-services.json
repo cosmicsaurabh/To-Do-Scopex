@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "656316410498",
+    "project_id": "rn-assignments",
+    "storage_bucket": "rn-assignments.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656316410498:android:74302b558251af6bc3229b",
+        "android_client_info": {
+          "package_name": "com.saurabhxscopexmoney"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "656316410498-dc1iqmuvhdro36gki2af246490h1ifj3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.saurabhxscopexmoney",
+            "certificate_hash": "1904550ae2540638465b12c034b0ab73033ff25d"
+          }
+        },
+        {
+          "client_id": "656316410498-c9ko9e1uvo9ihq0c9veno2rvrmh75ge2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmzuGf2KyKuGjswE2DYmM8-06KyxIXwoI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656316410498-c9ko9e1uvo9ihq0c9veno2rvrmh75ge2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 package="com.saurabhxscopexmoney">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,6 +11,23 @@ package="com.saurabhxscopexmoney">
       android:allowBackup="false"
       android:theme="@style/AppTheme"
       android:supportsRtl="true">
+
+
+
+
+       <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <!-- Firebase configuration metadata -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+
+
+
+
+
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -21,6 +39,16 @@ package="com.saurabhxscopexmoney">
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+
+         <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Replace with your app's package and host if using web authentication -->
+                <data android:scheme="https" android:host="com.saurabhxscopexmoney" />
+            </intent-filter>
+
       </activity>
     </application>
 </manifest>

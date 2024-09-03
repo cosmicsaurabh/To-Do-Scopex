@@ -55,8 +55,11 @@ const TodoProvider = ({ children }) => {
   };
   
   const addTodoItem = async (title,bookmarked) => {
+   // console.log("insinde tofo provifer", title,bookmarked);
     const newTodo = { id: UUID.v4(), title, done: false, bookmarked };
+    //console.log("insinde tofo provifer",newTodo);
     const updatedTodos = [...allTodos, newTodo];
+    //console.log("insinde tofo provifer",updatedTodos);
     await saveTodos(updatedTodos);
     // setIsChangedSomething(!isChangedSomething);
   };
