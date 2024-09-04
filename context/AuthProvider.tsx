@@ -50,13 +50,15 @@ export const AuthProvider = ({ children }) => {
       const existingUsers = await AsyncStorage.getItem('users');
       const users = existingUsers ? JSON.parse(existingUsers) : [];
       
-      const userExists = users.some(user => user.email === userData.email);
+      const formattedPhoneNumber = `+91${userData.phone}`;
+      const userExists = users.some(user => user.email === userData.email || user.phone === formattedPhoneNumber);
       if (userExists) {
+        showToast('User with same email or phone number already exist....please signin');
         return { success: false, message: 'A user with this email already exists.' };
       }
-      
-      const newUser = { ...userData, todos: [] };
+      const newUser = { ...userData,phone: formattedPhoneNumber, todos: [] };
       users.push(newUser);
+      console.log(newUser);
       await AsyncStorage.setItem('users', JSON.stringify(users));
       showsuccessToast('☺️! Registered successfully !!!');
       return { success: true, message: 'Sign up successful.' };
@@ -110,11 +112,13 @@ export const AuthProvider = ({ children }) => {
       }
 
       const checkemail = userInfo?.data?.user?.email;
+      const checkphone = userInfo?.data?.user?.phoneNumber;
+      console.log(checkphone);
       
       const storedUsers = await AsyncStorage.getItem('users');
       const users = storedUsers ? JSON.parse(storedUsers) : [];
       
-      const userData = users.find(user => user.email === checkemail);
+      const userData = users.find(user => user.email === checkemail || user.phone === checkphone );
       if (userData) {
         showToast('This account is already registered please sign in');
         return true;
@@ -181,6 +185,58 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: 'An error occurred with Google sign-in. Please try again later.' };
     }
   };
+  const signInAndSignUpWithPhoneNumber = async (phoneNumber) => {
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      showsuccessToast('OTP Sent... Wait');
+      return { success: true, confirmation };
+    } catch (error) {
+      showToast('Error signing-in with Phone');
+      console.error('Error with phone sign-in:', error);
+      return { success: false, error };
+    }
+  };
+  const confirmCodeAndSignInOrSignUp = async (phoneNumber,confirmation, code) => {
+    try {
+      const result = await confirmation.confirm(code);
+      console.log(result,"     OTP  VERIFIED");
+
+      const checkphone = phoneNumber;
+      const storedUsers = await AsyncStorage.getItem('users');
+      const users = storedUsers ? JSON.parse(storedUsers) : [];
+      console.log(users.stringify())
+      const userData = users.find(user => user.phone === checkphone);
+      if (userData) {
+        setUser(userData);
+        setIsLoggedIn(true);
+        await AsyncStorage.setItem('currentUser', JSON.stringify(userData));
+        showsuccessToast('👍! Signed in through phone successfully !!!');
+        return { success: true, message: 'Phone sign-in successful.' };
+
+      }
+      else{
+        const newUser = {
+          username : 'phoneNumber',
+          email:'',
+          password: '',
+          profilePic:'',
+          phone: phoneNumber,
+          todos:[],
+        }
+          users.push(newUser);
+          await AsyncStorage.setItem('users', JSON.stringify(users));
+          await AsyncStorage.setItem('currentUser', JSON.stringify(newUser));
+          setIsLoggedIn(true);
+          setUser(newUser);
+          showsuccessToast('☺️! Registered through Phone  successfully !!!');
+          return { success: true, message: 'Phone number sign up successful.' };
+      };
+      } catch (error) {
+        console.error('Error confirming OTP:', error);
+        showToast('🧐 OTP not matched');
+        return { success: false, error };
+    }
+  };
   
   const logout = async () => {
     try {
@@ -215,7 +271,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, signin, googleSignIn, googleSignUp, signup, logout, isLoggedIn, isLoading, deleteUser }}>
+    <AuthContext.Provider value={{ user, signin, googleSignIn, googleSignUp, signup,confirmCodeAndSignInOrSignUp,signInAndSignUpWithPhoneNumber, logout, isLoggedIn, isLoading, deleteUser, }}>
       {children}
     </AuthContext.Provider>
   );
