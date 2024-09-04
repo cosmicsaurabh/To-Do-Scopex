@@ -115,7 +115,6 @@ const SignIn = () => {
       const success = await googleSignIn();
       if (!success) {
         setErrorText('Failed to sign in with Google.....try again later');
-        console.log('check');
       }
     } catch (error) {
       console.error('Google Sign-In Error:', error);

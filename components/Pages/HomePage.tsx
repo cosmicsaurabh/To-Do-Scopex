@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState,useEffect} from 'react';
 import {
   SafeAreaView,
   FlatList,
@@ -152,13 +152,13 @@ function HomePage({navigation}: any): JSX.Element {
   if(isBookmarkedToggled){
     bookmarkedtodos = todos.filter(that => that.bookmarked)
   } 
-
+  
 
   const handleLoadMore = async () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    await loadMoreTodos();
-  
+    const { hasMore: more } = await loadMoreTodos(); 
+    setHasMore(more);
     setLoading(false);
   };
 
@@ -221,7 +221,7 @@ function HomePage({navigation}: any): JSX.Element {
           <FlatList
           data={isBookmarkedToggled?bookmarkedtodos:todos}
           renderItem={renderTodoItem}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.todo_id}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           ListFooterComponent={

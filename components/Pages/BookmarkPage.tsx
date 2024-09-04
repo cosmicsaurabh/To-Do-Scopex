@@ -146,14 +146,15 @@ const handleBookmarkToDo = async item => {
 const [loading, setLoading] = useState(false);
 const [hasMore, setHasMore] = useState(true);
 
+
 const handleLoadMore = async () => {
   if (loading || !hasMore) return;
   setLoading(true);
-  const s = await loadMoreTodos();
-  try {
-    const hasMoreTodos = await loadMoreTodos();
-    setHasMore(hasMoreTodos);
-  } catch (error) {
+  try{
+    const { hasMore: more } = await loadMoreTodos(); 
+    setHasMore(more);
+  }
+  catch (error) {
     console.error('Error loading more todos', error);
     Toast.show({
       type: 'error',
@@ -220,7 +221,7 @@ return (
           <FlatList
             data={bookmarkedTodos}
             renderItem={renderTodoItem}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.todo_id}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.1}
             ListFooterComponent={

@@ -24,7 +24,6 @@ export default function ProfilePage() {
       text1: 'Success',
       text2: message,
     });
-    
   };
   const hanldetoggleTheme = () =>{
     toggleTheme();
@@ -63,14 +62,21 @@ export default function ProfilePage() {
             />
             </View>
         <View style={styles.userInfo}>
+          <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>User_id:</Text>
+          <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.user_id}</Text>
           <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Username:</Text>
           <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.username}</Text>
           <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Phone:</Text>
           <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.phone}</Text>
           <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Email:</Text>
           <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.email}</Text>
+          <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>ProfilePic:</Text>
+          {user.profilePic !== '' ? 
           <Image style={{height:100,width:100}} 
         source = {{uri:user.profilePic}} />
+        : <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>No image found in db</Text>
+          }
+          {/* <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.todos[0]}</Text> */}
         </View>
 
       </ScrollView>

@@ -4,6 +4,9 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import { WEB_CLIENT_ID } from '@env';
 import Toast from 'react-native-toast-message';
+import UUID from 'react-native-uuid';
+
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -56,9 +59,13 @@ export const AuthProvider = ({ children }) => {
         showToast('User with same email or phone number already exist....please signin');
         return { success: false, message: 'A user with this email already exists.' };
       }
-      const newUser = { ...userData,phone: formattedPhoneNumber, todos: [] };
+      const newUser = { ...userData,
+        user_id:UUID.v4(),
+        profilePic:'', 
+        phone: formattedPhoneNumber, 
+        user_todos: [] 
+      };
       users.push(newUser);
-      console.log(newUser);
       await AsyncStorage.setItem('users', JSON.stringify(users));
       showsuccessToast('☺️! Registered successfully !!!');
       return { success: true, message: 'Sign up successful.' };
@@ -113,7 +120,7 @@ export const AuthProvider = ({ children }) => {
 
       const checkemail = userInfo?.data?.user?.email;
       const checkphone = userInfo?.data?.user?.phoneNumber;
-      console.log(checkphone);
+      console.log("checjpone",checkphone);
       
       const storedUsers = await AsyncStorage.getItem('users');
       const users = storedUsers ? JSON.parse(storedUsers) : [];
@@ -130,12 +137,14 @@ export const AuthProvider = ({ children }) => {
       const currentUser = userCredential.user.toJSON();
       
       const newUser = {
-        email: checkemail,
-        password: userInfo.data.idToken,
+        user_id :UUID.v4(),
         username: userInfo.data.user.name,
+        email: checkemail,
+        password: "notpassord",
+        // password: userInfo.data.idToken,
         profilePic: userInfo.data.user.photo,
         phone: currentUser.phoneNumber || '',
-        todos: []
+        user_todos: []
       };
       
       users.push(newUser);
@@ -171,9 +180,9 @@ export const AuthProvider = ({ children }) => {
       const userData = users.find(user => user.email === checkemail);
       if (userData) {
         setUser(userData);
+        showsuccessToast('👍! Signed in through google successfully !!!');
         setIsLoggedIn(true);
         await AsyncStorage.setItem('currentUser', JSON.stringify(userData));
-        showsuccessToast('👍! Signed in through google successfully !!!');
         return { success: true, message: 'Google sign-in successful.' };
       } else {
         showToast('This account is not registered yet please register it !');
@@ -204,8 +213,10 @@ export const AuthProvider = ({ children }) => {
       const checkphone = phoneNumber;
       const storedUsers = await AsyncStorage.getItem('users');
       const users = storedUsers ? JSON.parse(storedUsers) : [];
-      console.log(users.stringify())
+      console.log("users -> ",users);
+      
       const userData = users.find(user => user.phone === checkphone);
+      console.log("userData->  ",userData);
       if (userData) {
         setUser(userData);
         setIsLoggedIn(true);
@@ -215,13 +226,15 @@ export const AuthProvider = ({ children }) => {
 
       }
       else{
+        
         const newUser = {
-          username : 'phoneNumber',
+          user_id: UUID.v4(),
+          username : phoneNumber,
           email:'',
           password: '',
           profilePic:'',
           phone: phoneNumber,
-          todos:[],
+          user_todos:[],
         }
           users.push(newUser);
           await AsyncStorage.setItem('users', JSON.stringify(users));
@@ -255,7 +268,7 @@ export const AuthProvider = ({ children }) => {
       const storedUsers = await AsyncStorage.getItem('users');
       const users = storedUsers ? JSON.parse(storedUsers) : [];
       
-      const updatedUsers = users.filter(u => u.email !== user.email);
+      const updatedUsers = users.filter(u => u.user_id !== user.user_id);
       
       await AsyncStorage.setItem('users', JSON.stringify(updatedUsers));
       await AsyncStorage.removeItem('currentUser');
@@ -278,3 +291,4 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+

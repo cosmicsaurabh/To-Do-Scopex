@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message';
 const TodoContext = createContext();
 
 const TodoProvider = ({children}) => {
-  const {user} = useAuth();
+  const {user,isLoggedIn} = useAuth();
   const [todos, setTodos] = useState([]);
   const [page, setPage] = useState(1);
   const [allTodos, setAllTodos] = useState([]);
@@ -15,8 +15,16 @@ const TodoProvider = ({children}) => {
   const ITEMS_PER_PAGE = 10;
 
   useEffect(() => {
-    fetchInitialTodos();
-  }, [user]);
+    
+    if (isLoggedIn && user) {
+      fetchInitialTodos();
+    } else {
+      setTodos([]);
+      setPage(1);
+      setAllTodos([]);
+      setError(null);
+    }
+  }, [user,isLoggedIn]);
   const showToast = message => {
     Toast.show({
       type: 'error',
@@ -33,26 +41,28 @@ const TodoProvider = ({children}) => {
       showToast(randomError);
       return;
     }
-    if (user) {
+    
       try {
-        const storedUsers =
-          JSON.parse(await AsyncStorage.getItem('users')) || [];
-        const currentUser = storedUsers.find(u => u.email === user.email);
-        const userTodos = currentUser ? currentUser.todos || [] : [];
+        const storedUsers = JSON.parse(await AsyncStorage.getItem('users'));
+        const currentUser = storedUsers?.find(u => u.user_id === user.user_id);
+        const userTodos =  currentUser?.user_todos || todos;
         setAllTodos(userTodos);
         setTodos(userTodos.slice(0, ITEMS_PER_PAGE));
         setPage(1);
+        console.log("all users ", storedUsers)
+        console.log("current users ", currentUser)
+        console.log("userTodds ", userTodos)
       } catch (err) {
         console.error('Error fetching todos:', err);
         setError('Failed to load todos. Please try again.');
         showToast('Failed to load todos. Please try again.');
       }
-    }
+    
   };
 
   const loadMoreTodos = async() => {
     await wait(200); // Simulate network delay
-    if (Math.random() < 0.2) {
+    if (Math.random() < 0.001) {
       const randomError = 'Random error occurred during loadmore ';
       console.error(randomError);
       showToast(randomError);
@@ -61,28 +71,32 @@ const TodoProvider = ({children}) => {
     try {
       const newPage = page + 1;
       const newTodos = allTodos.slice(0, newPage * ITEMS_PER_PAGE);
+      if (newTodos.length >= allTodos.length) {
+        setTodos(newTodos);
+        return { hasMore:false };
+      }
       setTodos(prevTodos => [
         ...prevTodos,
         ...newTodos.slice(prevTodos.length),
       ]);
       setPage(newPage);
+      return { hasMore:true };
     } catch (err) {
       console.error('Error loading more todos:', err);
       setError('Failed to load more todos. Please try again.');
       showToast('Failed to load more todos. Please try again.');
+      return { hasMore:false };
     }
   };
 
-  const saveTodos = async updatedTodos => {
+  const saveTodos = async (updatedTodos) => {
     if (user) {
       try {
-        const storedUsers =
-          JSON.parse(await AsyncStorage.getItem('users')) || [];
+        const storedUsers = JSON.parse(await AsyncStorage.getItem('users')) ;
         const currentUserIndex = storedUsers.findIndex(
-          u => u.email === user.email,
-        );
+          u => u.user_id === user.user_id);
         if (currentUserIndex !== -1) {
-          storedUsers[currentUserIndex].todos = updatedTodos;
+          storedUsers[currentUserIndex].user_todos = updatedTodos;
           await AsyncStorage.setItem('users', JSON.stringify(storedUsers));
           setAllTodos(updatedTodos);
           setTodos(updatedTodos.slice(0, page * ITEMS_PER_PAGE));
@@ -95,10 +109,10 @@ const TodoProvider = ({children}) => {
     }
   };
 
-  const bookmarkTodoItem = async updatedTodo => {
+  const bookmarkTodoItem = async (updatedTodo) => {
     try {
       const updatedTodos = allTodos.map(todo =>
-        todo.id === updatedTodo.id ? updatedTodo : todo,
+        todo.todo_id === updatedTodo.todo_id ? updatedTodo : todo,
       );
       await saveTodos(updatedTodos);
     } catch (err) {
@@ -120,8 +134,16 @@ const TodoProvider = ({children}) => {
       return;
     }
     try {
-      const newTodo = {id: UUID.v4(), title, done: false, bookmarked};
+      const newTodo = {
+        todo_id: UUID.v4(),
+        title:title, 
+        done: false,
+        bookmarked:bookmarked,
+      };
+      console.log("alltodos ",allTodos)
+      console.log("newtodo ",newTodo)
       const updatedTodos = [...allTodos, newTodo];
+      console.log("ipdated todo " ,updatedTodos)
       await saveTodos(updatedTodos);
     } catch (err) {
       console.error('Error adding todo:', err);
@@ -140,7 +162,7 @@ const TodoProvider = ({children}) => {
     }
     try {
       const updatedTodos = allTodos.map(todo =>
-        todo.id === updatedTodo.id ? updatedTodo : todo,
+        todo.todo_id === updatedTodo.todo_id ? updatedTodo : todo,
       );
       await saveTodos(updatedTodos);
     } catch (err) {
@@ -150,7 +172,7 @@ const TodoProvider = ({children}) => {
     }
   };
 
-  const deleteTodoItem = async id => {
+  const deleteTodoItem = async todo_id => {
     await wait(200); // Simulate network delay
     if (Math.random() < 0.2) {
       const randomError = 'Random error occurred during Deleting To-Do';
@@ -159,7 +181,7 @@ const TodoProvider = ({children}) => {
       return;
     }
     try {
-      const updatedTodos = allTodos.filter(todo => todo.id !== id);
+      const updatedTodos = allTodos.filter(todo => todo.todo_id !== todo_id);
       await saveTodos(updatedTodos);
     } catch (err) {
       console.error('Error deleting todo:', err);

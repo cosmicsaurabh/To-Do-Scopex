@@ -26,12 +26,12 @@ const HomeStack = () => (
 );
 const ProfileStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Profile" component={ProfilePage} />
+    <Stack.Screen name="Profile-Stack" component={ProfilePage} />
   </Stack.Navigator>
 );
 const BookmarkStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Bookmark" component={BookmarkPage} />
+    <Stack.Screen name="Bookmark-Stack" component={BookmarkPage} />
     
   </Stack.Navigator>
 );
