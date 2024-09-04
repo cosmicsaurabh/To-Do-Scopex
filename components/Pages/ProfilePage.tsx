@@ -1,5 +1,5 @@
 import { View,Image, Text, StyleSheet, ScrollView,SafeAreaView } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import LogoutButton from './LogoutButton';
 import { useAuth } from '../../context/AuthProvider';
 import DeleteUserButton from './DeleteUserButton';
@@ -7,7 +7,7 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import { useTheme } from '../../context/ThemeProvider';
 import GlobalStyle from '../others/GlobalStyle';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import Toast from 'react-native-toast-message';
 
 export default function ProfilePage() {
   const { user, isLoggedIn } = useAuth();
@@ -17,6 +17,26 @@ export default function ProfilePage() {
   const backgroundStyle = {
     backgroundColor: theme.colors.background,
   };
+  const showsuccessToast = (message) => {
+    Toast.show({
+      type: 'success',
+      position: 'bottom',
+      text1: 'Success',
+      text2: message,
+    });
+    
+  };
+  const hanldetoggleTheme = () =>{
+    toggleTheme();
+    if(isDarkTheme){
+      
+      showsuccessToast("It's 🌤️ Now take care !");
+    }
+    else{
+      
+      showsuccessToast("It's 🌌 Now Beware !");
+    }
+  }
 
   return (
     <SafeAreaView style={[styles.safearea, backgroundStyle]}>
@@ -39,7 +59,7 @@ export default function ProfilePage() {
             onColor="#E5E5E5"
             labelStyle={{ color: theme.colors.text, fontWeight: '600' }}
             size="large"
-            onToggle={toggleTheme}
+            onToggle={hanldetoggleTheme}
             />
             </View>
         <View style={styles.userInfo}>

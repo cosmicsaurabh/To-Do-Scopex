@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../context/ThemeProvider';
 
 const DeleteUserButton = ()=>{
-    const {deleteuser} = useAuth();
+    const {deleteUser} = useAuth();
     const {theme} = useTheme();
     const handleDeleteUser = () => {
       Alert.alert(
@@ -19,7 +19,7 @@ const DeleteUserButton = ()=>{
           {
             text: 'Delete',
             style: 'destructive',
-            onPress: () => deleteuser(),
+            onPress: () => deleteUser(),
           },
         ],
         { cancelable: false }
