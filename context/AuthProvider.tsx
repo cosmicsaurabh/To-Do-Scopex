@@ -18,6 +18,14 @@ export const AuthProvider = ({ children }) => {
       text2: message,
     });
   };
+  const showsuccessToast = (message) => {
+    Toast.show({
+      type: 'success',
+      position: 'bottom',
+      text1: 'Success',
+      text2: message,
+    });
+  };
   useEffect(() => {
     const loadUser = async () => {
       try {
@@ -50,6 +58,7 @@ export const AuthProvider = ({ children }) => {
       const newUser = { ...userData, todos: [] };
       users.push(newUser);
       await AsyncStorage.setItem('users', JSON.stringify(users));
+      showsuccessToast('☺️! Registered successfully !!!');
       return { success: true, message: 'Sign up successful.' };
     } catch (error) {
       console.error('Error signing up:', error);
@@ -69,6 +78,7 @@ export const AuthProvider = ({ children }) => {
           setUser(userData);
           setIsLoggedIn(true);
           await AsyncStorage.setItem('currentUser', JSON.stringify(userData));
+          showsuccessToast('👍! Signed in  successfully !!!');
           return { success: true, message: 'Sign in successful.' };
         } else {
           return { success: false, message: 'Invalid password or token.' };
@@ -89,6 +99,7 @@ export const AuthProvider = ({ children }) => {
   });
   
   const googleSignUp = async () => {
+    
     try {
       await GoogleSignin.signOut();
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
@@ -105,7 +116,9 @@ export const AuthProvider = ({ children }) => {
       
       const userData = users.find(user => user.email === checkemail);
       if (userData) {
-        return { success: false, message: 'This email is already registered. Please sign in instead.' };
+        showToast('This account is already registered please sign in');
+        return true;
+        
       }
       
       const googleCredential = auth.GoogleAuthProvider.credential(userInfo.data?.idToken);
@@ -126,6 +139,7 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.setItem('currentUser', JSON.stringify(newUser));
       setIsLoggedIn(true);
       setUser(newUser);
+      showsuccessToast('☺️! Registered through Google  successfully !!!');
       return { success: true, message: 'Google sign up successful.' };
       
     } catch (error) {
@@ -155,8 +169,10 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
         setIsLoggedIn(true);
         await AsyncStorage.setItem('currentUser', JSON.stringify(userData));
+        showsuccessToast('👍! Signed in through google successfully !!!');
         return { success: true, message: 'Google sign-in successful.' };
       } else {
+        showToast('This account is not registered yet please register it !');
         return { success: false, message: 'This email is not registered. Please sign up.' };
       }
     } catch (error) {
@@ -171,6 +187,7 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.removeItem('currentUser');
       setUser(null);
       setIsLoggedIn(false);
+      showsuccessToast('👋! You have been logged out successfully !!!');
     } catch (error) {
       showToast('Error Logging out');
       console.error('Error logging out:', error);
@@ -190,6 +207,7 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       setIsLoggedIn(false);
       console.log("User deleted successfully");
+      showsuccessToast('☠️! User ahs been deleted  successfully !!!');
     } catch (error) {
       showToast('Error Deleting User');
       console.error('Error deleting user:', error);
